@@ -10,6 +10,7 @@ const NAMESPACES: DictionaryNamespace[] = [
   "auth",
   "metadata",
   "demo",
+  "workspace",
 ];
 
 export async function getDictionary(locale: Locale): Promise<Dictionary> {

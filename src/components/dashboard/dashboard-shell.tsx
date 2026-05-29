@@ -8,8 +8,6 @@ import { usePathname } from "next/navigation";
 import {
   FileText,
   LayoutDashboard,
-  Megaphone,
-  Search,
   Share2,
   Shield,
   User,
@@ -33,12 +31,14 @@ export function DashboardShell({
   role,
   navItems,
   title,
+  subtitle,
   children,
 }: {
   locale: Locale;
   role: "influencer" | "brand" | "admin";
   navItems: NavItem[];
   title: string;
+  subtitle?: string;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -54,18 +54,24 @@ export function DashboardShell({
         : t?.("dashboard.adminTitle");
 
   return (
-    <div className="flex min-h-screen bg-[#eef0f3]">
-      <aside className="flex w-[240px] shrink-0 flex-col bg-[#1b1f24] text-white">
-        <div className="border-b border-white/10 px-5 py-5">
-          <Link
-            href={`/${locale}`}
-            className="text-lg font-semibold tracking-tight text-white hover:text-indigo-200"
-          >
+    <div className="min-h-screen bg-slate-100">
+      <header className="border-b border-gray-200 bg-white">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+          <Link href={`/${locale}`} className="font-semibold text-indigo-600">
             {BRAND.name}
           </Link>
-          <p className="mt-1 text-xs text-white/50">{roleLabel ?? role}</p>
+          <div className="flex items-center gap-3">
+            <span className="hidden text-sm text-gray-500 sm:inline">{roleLabel}</span>
+            <span className="hidden max-w-[200px] truncate text-sm text-gray-500 md:inline">
+              {user?.email}
+            </span>
+            <UserButton />
+          </div>
         </div>
-        <nav className="flex-1 space-y-0.5 px-3 py-4">
+      </header>
+
+      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[200px_1fr]">
+        <aside className="space-y-1">
           {navItems.map((item) => {
             const active = isDashboardNavActive(
               pathname,
@@ -78,10 +84,10 @@ export function DashboardShell({
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   active
-                    ? "bg-white/12 text-white"
-                    : "text-white/70 hover:bg-white/8 hover:text-white",
+                    ? "bg-indigo-600 text-white"
+                    : "text-gray-700 hover:bg-gray-200",
                 )}
               >
                 <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
@@ -89,37 +95,17 @@ export function DashboardShell({
               </Link>
             );
           })}
-        </nav>
-        <div className="border-t border-white/10 px-5 py-4 text-xs text-white/40">
-          LATAM · POC
-        </div>
-      </aside>
+        </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-14 shrink-0 items-center justify-between border-b border-gray-200/80 bg-white px-6 shadow-sm">
-          <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
-          <div className="flex items-center gap-3">
-            <span className="hidden max-w-[200px] truncate text-sm text-gray-500 sm:inline">
-              {user?.email}
-            </span>
-            <UserButton />
-          </div>
-        </header>
-        <main className="flex-1 overflow-auto p-6">
-          {!t ? <p className="text-gray-500">…</p> : children}
+        <main>
+          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+          {subtitle && <p className="mt-2 text-gray-600">{subtitle}</p>}
+          <div className="mt-8">{!t ? <p className="text-gray-500">…</p> : children}</div>
         </main>
       </div>
     </div>
   );
 }
-
-export const brandNavIcons = {
-  overview: LayoutDashboard,
-  profile: User,
-  search: Search,
-  campaigns: Megaphone,
-  proposals: FileText,
-} as const;
 
 export const influencerNavIcons = {
   overview: LayoutDashboard,

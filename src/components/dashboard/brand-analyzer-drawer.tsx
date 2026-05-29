@@ -142,9 +142,9 @@ export function BrandAnalyzerDrawer({
             <div className="mt-8 space-y-3">
               {!hasCampaign && (
                 <p className="text-sm text-amber-700 dark:text-amber-300">
-                  {t("dashboard.flowNeedCampaign")}{" "}
+                  {t("dashboard.selectCampaignFirst")}{" "}
                   <Link href={`${base}/campaigns`} className="font-medium underline">
-                    {t("dashboard.navCampaigns")}
+                    {t("workspace.navCampaigns")}
                   </Link>
                 </p>
               )}
@@ -153,7 +153,7 @@ export function BrandAnalyzerDrawer({
                   {t("common.sendProposal")}
                 </Button>
                 <Link href={`${base}/proposals`}>
-                  <Button variant="outline">{t("dashboard.flowViewProposals")}</Button>
+                  <Button variant="outline">{t("workspace.navProposals")}</Button>
                 </Link>
               </div>
             </div>

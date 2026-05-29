@@ -6,9 +6,9 @@ import type { Locale } from "@/lib/i18n";
 import { useDictionary } from "@/lib/i18n";
 
 const STEPS = [
-  { key: "flowDiscover" as const, suffix: "/search" },
-  { key: "flowAnalyzer" as const, suffix: "/search" },
-  { key: "flowProposal" as const, suffix: "/proposals" },
+  { labelKey: "navDiscover" as const, suffix: "/search" },
+  { labelKey: "navAnalyzer" as const, suffix: "/search" },
+  { labelKey: "navProposals" as const, suffix: "/proposals" },
 ] as const;
 
 export type BrandFlowStep = "discover" | "analyzer" | "proposal";
@@ -39,7 +39,7 @@ export function BrandFlowStrip({
           const isActive = i === activeIndex;
           const isDone = i < activeIndex;
           return (
-            <li key={step.key} className="flex items-center gap-2">
+            <li key={step.labelKey} className="flex items-center gap-2">
               {i > 0 && <span className="text-gray-300" aria-hidden>→</span>}
               <Link
                 href={`${base}${step.suffix}`}
@@ -54,7 +54,7 @@ export function BrandFlowStrip({
                     "bg-gray-100 text-gray-600 hover:bg-gray-200",
                 )}
               >
-                {i + 1}. {t(`dashboard.${step.key}`)}
+                {i + 1}. {t(`workspace.${step.labelKey}`)}
               </Link>
             </li>
           );
