@@ -4,17 +4,14 @@ import { useMutation, useQuery } from "convex/react";
 import { useAuthSkip } from "@/hooks/use-auth-skip";
 import { useState } from "react";
 import { toast } from "sonner";
+import { DiscoverCreatorCard } from "@/components/brand-workspace/discover-creator-card";
 import { BrandAnalyzerDrawer } from "@/components/dashboard/brand-analyzer-drawer";
 import { BrandFlowStrip } from "@/components/dashboard/brand-flow-strip";
 import {
-  CreatorAvatar,
-  MetricBlock,
   Panel,
   PanelBody,
   PanelHeader,
-  PostThumbPlaceholder,
 } from "@/components/dashboard/dashboard-primitives";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -133,36 +130,36 @@ export function BrandSearchPanel({ locale }: { locale: Locale }) {
       <BrandFlowStrip locale={locale} active={flowStep} />
       <Panel className="mb-6">
         <PanelBody className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <Label>{t("dashboard.campaigns")}</Label>
-          <Select
-            className="mt-1"
-            value={selectedCampaign}
-            onChange={(e) => setSelectedCampaign(e.target.value)}
-          >
-            <option value="">—</option>
-            {(campaigns ?? []).map((c) => (
-              <option key={c._id} value={c._id}>
-                {c.title}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <div>
-          <Label>{t("dashboard.proposalRate")}</Label>
-          <Input
-            type="number"
-            className="mt-1"
-            value={proposalRate}
-            onChange={(e) => setProposalRate(e.target.value)}
-          />
-        </div>
+          <div>
+            <Label>{t("dashboard.campaigns")}</Label>
+            <Select
+              className="mt-1"
+              value={selectedCampaign}
+              onChange={(e) => setSelectedCampaign(e.target.value)}
+            >
+              <option value="">—</option>
+              {(campaigns ?? []).map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.title}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div>
+            <Label>{t("dashboard.proposalRate")}</Label>
+            <Input
+              type="number"
+              className="mt-1"
+              value={proposalRate}
+              onChange={(e) => setProposalRate(e.target.value)}
+            />
+          </div>
         </PanelBody>
       </Panel>
 
       <Panel>
-        <div className="grid lg:grid-cols-[240px_1fr]">
-          <aside className="border-b border-gray-100 bg-[#f8f9fb] p-5 lg:border-b-0 lg:border-r">
+        <div className="grid lg:grid-cols-[260px_1fr] xl:grid-cols-[280px_1fr]">
+          <aside className="border-b border-gray-100 bg-[#f8f9fb] p-5 lg:border-b-0 lg:border-r dark:border-gray-800 dark:bg-gray-900/80">
             <p className="text-xs font-semibold uppercase text-gray-500">
               {t("dashboard.searchFilters")}
             </p>
@@ -283,71 +280,43 @@ export function BrandSearchPanel({ locale }: { locale: Locale }) {
                   {t("dashboard.noResults")}
                 </p>
               ) : (
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                   {results.map(({ profile, primaryAccount }) => (
-                    <article
+                    <DiscoverCreatorCard
                       key={profile._id}
-                      className="cursor-pointer rounded-xl border border-gray-200/90 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+                      displayName={profile.displayName}
+                      subtitle={`${profile.city}, ${profile.country}`}
+                      category={profile.category}
+                      followers={
+                        primaryAccount
+                          ? formatCount(primaryAccount.followers)
+                          : "—"
+                      }
+                      reach={
+                        primaryAccount
+                          ? formatCount(primaryAccount.avgViews)
+                          : "—"
+                      }
+                      engagementRate={
+                        primaryAccount
+                          ? `${primaryAccount.engagementRate}%`
+                          : "—"
+                      }
+                      followersLabel={t("dashboard.colFollowers")}
+                      reachLabel={t("dashboard.analyzerReach")}
+                      engagementLabel={t("dashboard.colEr")}
                       onClick={() => setAnalyzerId(profile._id)}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="flex min-w-0 gap-3">
-                          <CreatorAvatar name={profile.displayName} />
-                          <div className="min-w-0">
-                            <p className="truncate font-semibold text-gray-900">
-                              {profile.displayName}
-                            </p>
-                            <p className="truncate text-xs text-gray-500">
-                              {profile.city}, {profile.country}
-                            </p>
-                            <Badge className="mt-1 text-[10px]">{profile.category}</Badge>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-4 grid grid-cols-3 gap-2 border-y border-gray-100 py-3">
-                        <MetricBlock
-                          label={t("dashboard.colFollowers")}
-                          value={
-                            primaryAccount
-                              ? formatCount(primaryAccount.followers)
-                              : "—"
-                          }
-                        />
-                        <MetricBlock
-                          label={t("dashboard.analyzerReach")}
-                          value={
-                            primaryAccount
-                              ? formatCount(primaryAccount.avgViews)
-                              : "—"
-                          }
-                        />
-                        <MetricBlock
-                          label={t("dashboard.colEr")}
-                          value={
-                            primaryAccount
-                              ? `${primaryAccount.engagementRate}%`
-                              : "—"
-                          }
-                          highlight
-                        />
-                      </div>
-                      <div className="mt-3 flex justify-center gap-2">
-                        {[0, 1, 2].map((i) => (
-                          <PostThumbPlaceholder key={i} index={i} />
-                        ))}
-                      </div>
-                      <Button
-                        size="sm"
-                        className="mt-4 w-full"
-                        variant="outline"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          void handleProposal(profile._id);
-                        }}
-                      >
-                        {t("common.sendProposal")}
-                      </Button>
-                    </article>
+                      footer={
+                        <Button
+                          size="sm"
+                          className="w-full"
+                          variant="outline"
+                          onClick={() => void handleProposal(profile._id)}
+                        >
+                          {t("common.sendProposal")}
+                        </Button>
+                      }
+                    />
                   ))}
                 </div>
               )}

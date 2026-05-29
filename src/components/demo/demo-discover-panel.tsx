@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { DiscoverCreatorCard } from "@/components/brand-workspace/discover-creator-card";
+import { Panel, PanelBody, PanelHeader } from "@/components/dashboard/dashboard-primitives";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +20,10 @@ function formatCount(n: number) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
   return String(n);
+}
+
+function estimatedReach(followers: number) {
+  return formatCount(Math.round(followers * 0.12));
 }
 
 export function DemoDiscoverPanel({ locale }: { locale: Locale }) {
@@ -52,9 +58,9 @@ export function DemoDiscoverPanel({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <div className="grid lg:grid-cols-[220px_1fr]">
-          <aside className="border-b border-gray-100 bg-gray-50 p-4 lg:border-b-0 lg:border-r dark:border-gray-800 dark:bg-gray-900/80">
+      <Panel>
+        <div className="grid lg:grid-cols-[260px_1fr] xl:grid-cols-[280px_1fr]">
+          <aside className="border-b border-gray-100 bg-[#f8f9fb] p-5 lg:border-b-0 lg:border-r dark:border-gray-800 dark:bg-gray-900/80">
             <p className="text-xs font-semibold uppercase text-gray-500">
               {t("demo.filterLabel")}
             </p>
@@ -124,63 +130,51 @@ export function DemoDiscoverPanel({ locale }: { locale: Locale }) {
             </div>
           </aside>
 
-          <div className="min-w-0 p-4">
-            <p className="mb-3 text-sm font-semibold">
-              {t("demo.resultsTitle")}{" "}
-              <span className="font-normal text-gray-500">({filtered.length})</span>
-            </p>
-            {filtered.length === 0 ? (
-              <p className="py-8 text-center text-sm text-gray-500">
-                {t("demo.noResults")}
-              </p>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="text-xs uppercase text-gray-500">
-                      <th className="pb-2 pr-4">{t("demo.colCreator")}</th>
-                      <th className="pb-2 pr-4">{t("demo.colFollowers")}</th>
-                      <th className="pb-2 pr-4">{t("demo.colEr")}</th>
-                      <th className="pb-2">{t("demo.colActions")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filtered.map((row) => (
-                      <tr
-                        key={row.id}
-                        className="cursor-pointer border-t border-gray-100 hover:bg-indigo-50/50 dark:border-gray-800 dark:hover:bg-indigo-950/30"
-                        onClick={() => setSelected(row)}
-                      >
-                        <td className="py-3 pr-4">
-                          <p className="font-medium">{row.displayName}</p>
-                          <p className="text-xs text-gray-500">
-                            {row.handle} · {row.city}
-                          </p>
-                        </td>
-                        <td className="py-3 pr-4 tabular-nums">
-                          {formatCount(row.followers)}
-                        </td>
-                        <td className="py-3 pr-4 tabular-nums text-emerald-600">
-                          {row.engagementRate}%
-                        </td>
-                        <td className="py-3">
-                          <Link
-                            href={`/${locale}/demo/analyzer?creator=${row.id}`}
-                            className="text-xs font-medium text-indigo-600 hover:underline"
-                            onClick={(e) => e.stopPropagation()}
-                          >
+          <div className="min-w-0 p-5">
+            <PanelHeader
+              title={t("demo.resultsTitle")}
+              subtitle={t("dashboard.resultsCount", {
+                count: String(filtered.length),
+              })}
+            />
+            <PanelBody className="pt-0">
+              {filtered.length === 0 ? (
+                <p className="py-12 text-center text-sm text-gray-500">
+                  {t("demo.noResults")}
+                </p>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                  {filtered.map((row) => (
+                    <DiscoverCreatorCard
+                      key={row.id}
+                      displayName={row.displayName}
+                      subtitle={`${row.handle} · ${row.city}`}
+                      category={row.category}
+                      followers={formatCount(row.followers)}
+                      reach={estimatedReach(row.followers)}
+                      engagementRate={`${row.engagementRate}%`}
+                      followersLabel={t("demo.colFollowers")}
+                      reachLabel={t("demo.analyzerReach")}
+                      engagementLabel={t("demo.colEr")}
+                      onClick={() => setSelected(row)}
+                      footer={
+                        <Link
+                          href={`/${locale}/demo/analyzer?creator=${row.id}`}
+                          className="block"
+                        >
+                          <Button size="sm" className="w-full" variant="outline">
                             {t("demo.viewAnalyzer")}
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                          </Button>
+                        </Link>
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+            </PanelBody>
           </div>
         </div>
-      </div>
+      </Panel>
 
       {selected && (
         <div

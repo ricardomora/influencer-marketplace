@@ -35,5 +35,11 @@
   "proposalsPageSubtitle": "Status of collaborations sent to creators.",
   "analyzerLiveHint": "Open Discover, pick a creator, and use the side sheet for the analyzer with live data.",
   "linkToDemo": "View public demo",
-  "linkToLive": "Go to live panel"
+  "linkToLive": "Go to live panel",
+  "sidebarCollapse": "Collapse menu",
+  "sidebarExpand": "Expand menu",
+  "sidebarOpen": "Open menu",
+  "sidebarClose": "Close menu",
+  "sidebarToggle": "Toggle menu",
+  "sidebarMenu": "Menu"
 }

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { DemoCampaignList } from "@/components/demo/demo-campaign-list";
 import { DemoCampaignWizard } from "@/components/demo/demo-campaign-wizard";
 import { DemoShell } from "@/components/demo/demo-shell";
 import { brandPageCopy } from "@/lib/brand-workspace/config";
@@ -24,7 +25,10 @@ export default async function DemoCampaignsPage({
       title={t(`workspace.${copy.titleKey}`)}
       subtitle={t(`workspace.${copy.subtitleKey}`)}
     >
-      <DemoCampaignWizard locale={locale} />
+      <div className="space-y-6">
+        <DemoCampaignWizard locale={locale} />
+        <DemoCampaignList locale={locale} dict={dict} />
+      </div>
     </DemoShell>
   );
 }

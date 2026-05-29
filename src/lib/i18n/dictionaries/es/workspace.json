@@ -35,5 +35,11 @@
   "proposalsPageSubtitle": "Estado de colaboraciones enviadas a creadores.",
   "analyzerLiveHint": "Abre Discover, elige un creador y usa la ficha lateral para ver el analyzer con datos reales.",
   "linkToDemo": "Ver demo pública",
-  "linkToLive": "Ir al panel en vivo"
+  "linkToLive": "Ir al panel en vivo",
+  "sidebarCollapse": "Contraer menú",
+  "sidebarExpand": "Expandir menú",
+  "sidebarOpen": "Abrir menú",
+  "sidebarClose": "Cerrar menú",
+  "sidebarToggle": "Alternar menú",
+  "sidebarMenu": "Menú"
 }
