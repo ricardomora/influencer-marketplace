@@ -18,36 +18,17 @@ Dual CTA marca/influencer, métricas POC.
 
 ### LAND-003 — ~~Demo funcional en hero~~ ❌ CANCELADO
 
-**Motivo:** Tabla/buscador en landing expone producto incompleto. Código conservado en `embedded-search-demo.tsx` para rutas `/demo/*` futuras.
+**Motivo:** Tabla/buscador en landing expone producto incompleto. Implementar discover en `DEMO-002`, no en home.
 
-### LAND-014 — Landing futurista (premium) 🔄 EN CURSO
+### LAND-014 — Landing futurista (premium) ✅
 
-**Priority:** P0 · **Effort:** L
-
-**Description**  
-Reemplazar demo vivo por experiencia de marketing: fondo interactivo, hero oscuro, mockups estáticos de plataforma (Discover / Analyzer / Campaign planner), grid de herramientas, redes sociales, FAQ.
-
-**Acceptance criteria**
-
-- [ ] Sin `EmbeddedSearchDemo` en `marketing-home.tsx`
-- [ ] `marketing-hero-background.tsx` + animaciones en `globals.css`
-- [ ] `platform-preview-mockups.tsx` — solo UI decorativa
-- [ ] Nav: Plataforma / Herramientas / Cómo funciona (no "Demo" en hero)
-- [ ] es/en `marketing.json` actualizado
-- [ ] `pnpm run build` OK
-
-**Dependencies:** LAND-001
-
----
+Hero interactivo, mockups estáticos, herramientas + visión IA, sin demo funcional ni nombres de competidores.
 
 ### LAND-006 — Cómo funciona (5 pasos) ✅
 
-### LAND-007 — Grid herramientas (Discover, Analyzer, …)
+### LAND-007 — Grid herramientas ✅
 
-**Priority:** P1 · **Effort:** S  
-Mapear herramientas SocialPubli; badge "En roadmap" donde aplique.
-
-**Dependencies:** LAND-014
+`marketing-tools-section.tsx` + tarjetas IA (Visión IA / En POC).
 
 ---
 
@@ -97,7 +78,7 @@ Shell tipo `my_panel`: sidebar Buscar · Campañas · Propuestas · CTA signup. 
 
 ### DEMO-002 — Discover
 
-Réplica pulida de discover: filtros + grid + detalle lateral. Reutilizar `embedded-search-demo` o Convex seed.
+Réplica pulida de discover: filtros + grid + detalle lateral. Reutilizar patrones de `brand-search-panel` o Convex seed.
 
 **Ref:** `socialpubli.com/advertisers/discover`  
 **App real:** `/dashboard/brand/search`

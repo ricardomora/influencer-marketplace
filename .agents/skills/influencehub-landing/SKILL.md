@@ -48,7 +48,7 @@ Backlog: [issues.md](./issues.md) — issues `LAND-*` (landing) and `DEMO-*` (pr
 - `src/components/marketing/marketing-hero-background.tsx` — interactive background (client)
 - `src/components/marketing/platform-preview-mockups.tsx` — static product chrome
 - `src/app/globals.css` — marketing animations
-- `src/lib/demo/*` — reserved for `/demo` routes, **not** embedded in landing
+- `/demo` routes (future) — build discover UI when `DEMO-002` ships; do not embed live search on landing
 
 ## Real app (post-signup)
 
