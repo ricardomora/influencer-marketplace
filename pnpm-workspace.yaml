@@ -1,0 +1,6 @@
+# pnpm 11+: allow postinstall/build scripts for these deps (see https://pnpm.io/settings#allowbuilds)
+allowBuilds:
+  "@clerk/shared": true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true

@@ -1,0 +1,16 @@
+{
+  "appName": "InfluenceHub",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "loading": "Cargando…",
+  "search": "Buscar",
+  "connect": "Conectar",
+  "syncMetrics": "Sincronizar métricas",
+  "sendProposal": "Enviar propuesta",
+  "accept": "Aceptar",
+  "reject": "Rechazar",
+  "create": "Crear",
+  "edit": "Editar",
+  "followers": "Seguidores",
+  "engagement": "Engagement"
+}
