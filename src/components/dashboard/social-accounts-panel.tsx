@@ -55,6 +55,9 @@ export function SocialAccountsPanel({ locale }: { locale: Locale }) {
 
   return (
     <div className="space-y-6">
+      <p className="text-sm text-gray-600 dark:text-gray-400">
+        {t("dashboard.socialConnectHint")}
+      </p>
       <Card>
         <CardTitle>{t("dashboard.navSocial")}</CardTitle>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">

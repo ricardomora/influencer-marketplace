@@ -120,59 +120,51 @@ Filtros vivos + tabla + modal signup en `/demo/discover` (`demo-discover-panel.t
 
 Implementar aquí la paridad “de sistema”. Reutilizar `brand-search-panel`, `brand-campaigns-panel`, `brand-proposals-panel`.
 
-### DASH-001 — Overview panel marca
+### DASH-001 — Overview panel marca ✅
 
-Home `/dashboard/brand`: campañas activas, propuestas recientes, CTA crear campaña.
-
-**Prioridad:** P1 · **Effort:** M
+`brand-overview-panel.tsx` — home `/dashboard/brand` con KPIs, recientes y CTAs.
 
 ---
 
-### DASH-002 — Discover UX (datos reales)
+### DASH-002 — Discover UX (datos reales) ✅
 
-Mejorar `/dashboard/brand/search`: layout tipo demo, filtros claros, ficha rápida / enlace a analyzer.
+`/dashboard/brand/search` — layout sidebar + tabla, filtros, campaña para propuesta.
 
-**Prioridad:** P0 · **Effort:** L · **Depende:** POC search ya existe
-
----
-
-### DASH-003 — Analyzer desde búsqueda
-
-Al elegir influencer: drawer o página con KPIs, demographics, redes (Convex + mock).
-
-**Prioridad:** P1 · **Effort:** L
+**Prioridad:** P0 · **Depende:** POC search ya existe
 
 ---
 
-### DASH-004 — Campaign planner (wizard)
+### DASH-003 — Analyzer desde búsqueda ✅
 
-Wizard en `/dashboard/brand/campaigns` alineado con demo: objetivo, presupuesto, fechas, red.
-
-**Prioridad:** P1 · **Effort:** L
+`brand-analyzer-drawer.tsx` — drawer con perfil + redes Convex al clic en fila.
 
 ---
 
-### DASH-005 — Propuestas y estados
+### DASH-004 — Campaign planner (wizard) ✅
 
-UX clara sent/accepted/rejected; filtros; timeline simple.
-
-**Prioridad:** P2 · **Effort:** M
+Wizard 3 pasos en `brand-campaigns-panel.tsx` + lista campañas con estados i18n.
 
 ---
 
-## Track E — Dashboard influencer (logueado, después)
+### DASH-005 — Propuestas y estados ✅
 
-### INFL-001 — Overview influencer
+Filtros por estado, badges, fechas en `brand-proposals-panel.tsx`.
 
-Propuestas pendientes, perfil completion, sync métricas CTA.
+---
 
-### INFL-002 — Perfil y redes (UX)
+## Track E — Dashboard influencer (logueado)
 
-Formulario perfil + social accounts panel más guiado.
+### INFL-001 — Overview influencer ✅
 
-### INFL-003 — Propuestas entrantes
+`influencer-overview-panel.tsx` — KPIs, propuestas recientes, CTAs.
 
-Lista y accept/reject con copy claro en es/en.
+### INFL-002 — Perfil y redes (UX) ✅
+
+Rutas `/profile` y `/social`; hint en `social-accounts-panel.tsx`.
+
+### INFL-003 — Propuestas entrantes ✅
+
+Filtros, estados i18n, accept/reject con toasts en `influencer-proposals-panel.tsx`.
 
 ---
 
@@ -180,9 +172,10 @@ Lista y accept/reject con copy claro en es/en.
 
 | Fase | Enfoque | Issues |
 |------|---------|--------|
-| **Ahora** | Vender (público) | LAND-011, LAND-013, pulir DEMO v1 |
-| **Después** | Marca logueada | DASH-001 → DASH-004 |
-| **Después** | Influencer logueado | INFL-001 → INFL-003 |
+| **Hecho** | Vender (público) | LAND-*, DEMO-* v1 |
+| **Hecho** | Marca logueada | DASH-001 → DASH-005 |
+| **Hecho** | Influencer logueado | INFL-001 → INFL-003 |
+| **Siguiente** | Pulir / E2E | demographics reales, nav activa, DEMO-006 opcional |
 | **Fase 2** | IA | AI-* (solo con OK) |
 
 ---

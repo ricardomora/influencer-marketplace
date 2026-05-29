@@ -1,7 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { InfluencerOverviewPanel } from "@/components/dashboard/influencer-overview-panel";
 import { InfluencerProfileForm } from "@/components/dashboard/influencer-profile-form";
 import { InfluencerProposalsPanel } from "@/components/dashboard/influencer-proposals-panel";
 import { SocialAccountsPanel } from "@/components/dashboard/social-accounts-panel";
@@ -9,12 +10,14 @@ import { type Locale, useDictionary } from "@/lib/i18n";
 
 export default function InfluencerDashboardPage() {
   const params = useParams();
+  const pathname = usePathname();
   const locale = (params.locale as Locale) ?? "es";
   const { t } = useDictionary(locale);
 
   const base = `/${locale}/dashboard/influencer`;
   const nav = [
-    { href: base, label: t?.("dashboard.navProfile") ?? "Profile" },
+    { href: base, label: t?.("dashboard.navOverview") ?? "Overview" },
+    { href: `${base}/profile`, label: t?.("dashboard.navProfile") ?? "Profile" },
     { href: `${base}/social`, label: t?.("dashboard.navSocial") ?? "Social" },
     {
       href: `${base}/proposals`,
@@ -22,18 +25,34 @@ export default function InfluencerDashboardPage() {
     },
   ];
 
+  const isProfile = pathname.includes("/profile");
+  const isSocial = pathname.includes("/social");
+  const isProposals = pathname.includes("/proposals");
+
+  const pageTitle = isSocial
+    ? t?.("dashboard.navSocial")
+    : isProposals
+      ? t?.("dashboard.navProposals")
+      : isProfile
+        ? t?.("dashboard.profileSection")
+        : t?.("dashboard.navOverview");
+
   return (
     <DashboardShell
       locale={locale}
       role="influencer"
-      title={t?.("dashboard.influencerTitle") ?? ""}
+      title={pageTitle ?? ""}
       navItems={nav}
     >
-      <div className="space-y-8">
-        <InfluencerProfileForm locale={locale} />
+      {isSocial ? (
         <SocialAccountsPanel locale={locale} />
+      ) : isProposals ? (
         <InfluencerProposalsPanel locale={locale} />
-      </div>
+      ) : isProfile ? (
+        <InfluencerProfileForm locale={locale} />
+      ) : (
+        <InfluencerOverviewPanel locale={locale} />
+      )}
     </DashboardShell>
   );
 }

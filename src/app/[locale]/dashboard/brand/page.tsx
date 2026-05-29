@@ -1,11 +1,12 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { BrandCampaignsPanel } from "@/components/dashboard/brand-campaigns-panel";
+import { BrandOverviewPanel } from "@/components/dashboard/brand-overview-panel";
 import { BrandProfileForm } from "@/components/dashboard/brand-profile-form";
 import { BrandProposalsPanel } from "@/components/dashboard/brand-proposals-panel";
 import { BrandSearchPanel } from "@/components/dashboard/brand-search-panel";
+import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { type Locale, useDictionary } from "@/lib/i18n";
 
 export default function BrandDashboardPage() {
@@ -16,7 +17,8 @@ export default function BrandDashboardPage() {
 
   const base = `/${locale}/dashboard/brand`;
   const nav = [
-    { href: base, label: t?.("dashboard.navProfile") ?? "Profile" },
+    { href: base, label: t?.("dashboard.navOverview") ?? "Overview" },
+    { href: `${base}/profile`, label: t?.("dashboard.navProfile") ?? "Profile" },
     { href: `${base}/search`, label: t?.("dashboard.navSearch") ?? "Search" },
     {
       href: `${base}/campaigns`,
@@ -28,15 +30,26 @@ export default function BrandDashboardPage() {
     },
   ];
 
+  const isProfile = pathname.includes("/profile");
   const isSearch = pathname.includes("/search");
   const isCampaigns = pathname.includes("/campaigns");
   const isProposals = pathname.includes("/proposals");
+
+  const pageTitle = isSearch
+    ? t?.("dashboard.navSearch")
+    : isCampaigns
+      ? t?.("dashboard.navCampaigns")
+      : isProposals
+        ? t?.("dashboard.navProposals")
+        : isProfile
+          ? t?.("dashboard.brandSection")
+          : t?.("dashboard.navOverview");
 
   return (
     <DashboardShell
       locale={locale}
       role="brand"
-      title={t?.("dashboard.brandTitle") ?? ""}
+      title={pageTitle ?? ""}
       navItems={nav}
     >
       {isSearch ? (
@@ -45,11 +58,10 @@ export default function BrandDashboardPage() {
         <BrandCampaignsPanel locale={locale} />
       ) : isProposals ? (
         <BrandProposalsPanel locale={locale} />
+      ) : isProfile ? (
+        <BrandProfileForm locale={locale} />
       ) : (
-        <div className="space-y-8">
-          <BrandProfileForm locale={locale} />
-          <BrandSearchPanel locale={locale} />
-        </div>
+        <BrandOverviewPanel locale={locale} />
       )}
     </DashboardShell>
   );
