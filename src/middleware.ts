@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { isClerkConfigured } from "@/lib/clerk-config";
 
 const isProtectedRoute = createRouteMatcher([
   "/:locale/dashboard(.*)",
@@ -9,19 +10,18 @@ const isProtectedRoute = createRouteMatcher([
 const locales = ["en", "es"] as const;
 const defaultLocale = "es";
 
-function getLocale(request: Request) {
+function getLocale(request: NextRequest) {
   const acceptLanguage = request.headers.get("accept-language");
   if (acceptLanguage?.toLowerCase().startsWith("en")) return "en";
   return defaultLocale;
 }
 
-export default clerkMiddleware(async (auth, request) => {
+function localeRouting(
+  request: NextRequest,
+  userId: string | null,
+  sessionClaims: Record<string, unknown> | null,
+) {
   const { pathname } = request.nextUrl;
-  const { userId, sessionClaims } = await auth();
-
-  if (isProtectedRoute(request)) {
-    await auth.protect();
-  }
 
   const pathnameHasLocale = locales.some(
     (locale) =>
@@ -63,7 +63,39 @@ export default clerkMiddleware(async (auth, request) => {
   }
 
   return NextResponse.next();
+}
+
+const withClerk = clerkMiddleware(async (auth, request) => {
+  const { userId, sessionClaims } = await auth();
+
+  if (isProtectedRoute(request)) {
+    await auth.protect();
+  }
+
+  return localeRouting(
+    request,
+    userId,
+    sessionClaims as Record<string, unknown> | null,
+  );
 });
+
+function withoutClerk(request: NextRequest) {
+  if (isProtectedRoute(request)) {
+    const locale = request.nextUrl.pathname.match(/^\/(en|es)/)?.[1] ?? defaultLocale;
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+  }
+  return localeRouting(request, null, null);
+}
+
+export default function middleware(
+  request: NextRequest,
+  event: Parameters<typeof withClerk>[1],
+) {
+  if (!isClerkConfigured()) {
+    return withoutClerk(request);
+  }
+  return withClerk(request, event);
+}
 
 export const config = {
   matcher: [

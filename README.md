@@ -101,6 +101,16 @@ Clerk gives you **two different** configs:
    ```
 7. (Optional, for user sync) Webhook → `http://localhost:3000/api/clerk` via ngrok in dev; events `user.created`, `user.updated`; set `CLERK_WEBHOOK_SECRET` in `.env.local`.
 
+### Troubleshooting: `Publishable key not valid` (browser)
+
+Your `.env.local` still has **placeholder** Clerk keys (e.g. `pk_test_placeholder`). Fix:
+
+1. [Clerk Dashboard](https://dashboard.clerk.com) → **API Keys**
+2. Copy the real **Publishable key** and **Secret key** into `.env.local`
+3. Restart `pnpm dev`
+
+The landing page works without valid keys; login/signup and the dashboard need real keys. See [docs/PRODUCT-ROADMAP.md](docs/PRODUCT-ROADMAP.md) for the product plan.
+
 ### Troubleshooting: “Conectando con el servidor…” on onboarding
 
 Convex stays loading until it **validates** a Clerk JWT (not just `CLERK_JWT_ISSUER_DOMAIN` in the dashboard).
