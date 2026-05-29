@@ -35,6 +35,10 @@
   "navPlatform": "Plataforma",
   "navTools": "Herramientas",
   "navHowItWorks": "Cómo funciona",
+  "navFaq": "FAQ",
+  "navDemo": "Explorar demo",
+  "faqTitle": "Preguntas frecuentes",
+  "faqSubtitle": "Todo lo que tu cliente o socio suele preguntar antes de contratar.",
   "footerTagline": "Conectando marcas e influencers en Latinoamérica.",
   "footerLogin": "Iniciar sesión",
   "footerSignup": "Registrarse",
@@ -81,5 +85,27 @@
   "visionSubtitle": "Hoy operas el marketplace end-to-end. Mañana, la IA acelera cada decisión creativa y operativa.",
   "visionPoint1": "Avatares de IA personalizados para briefs y pautas publicitarias",
   "visionPoint2": "Agente conversacional para diseñar y lanzar campañas",
-  "visionPoint3": "Logística de campaña como servicio, con recomendaciones en tiempo real"
+  "visionPoint3": "Logística de campaña como servicio, con recomendaciones en tiempo real",
+  "faqItems": [
+    {
+      "question": "¿Para quién es InfluenceHub?",
+      "answer": "Para marcas, agencias e influencers en LATAM que quieren un flujo único: descubrir talento, planificar campañas y cerrar colaboraciones sin fricción."
+    },
+    {
+      "question": "¿Qué países cubre el POC?",
+      "answer": "Colombia y Venezuela en esta fase, con datos demo y perfiles de ejemplo listos para presentaciones."
+    },
+    {
+      "question": "¿La IA ya está disponible?",
+      "answer": "El marketplace operativo está en POC. Avatares de IA y el agente de campañas están en roadmap (Visión IA) y se activarán en fases posteriores."
+    },
+    {
+      "question": "¿Cómo se conectan las redes sociales?",
+      "answer": "En el POC la conexión y métricas son simuladas para demostrar el flujo. OAuth real con Instagram y TikTok está planificado."
+    },
+    {
+      "question": "¿Puedo probar sin registrarme?",
+      "answer": "Sí: explora la vista demo pública. Para crear campañas y propuestas reales, crea una cuenta de marca o influencer."
+    }
+  ]
 }

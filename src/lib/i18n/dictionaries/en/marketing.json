@@ -35,6 +35,10 @@
   "navPlatform": "Platform",
   "navTools": "Tools",
   "navHowItWorks": "How it works",
+  "navFaq": "FAQ",
+  "navDemo": "Explore demo",
+  "faqTitle": "Frequently asked questions",
+  "faqSubtitle": "What clients and partners usually ask before signing on.",
   "footerTagline": "Connecting brands and influencers across Latin America.",
   "footerLogin": "Log in",
   "footerSignup": "Sign up",
@@ -81,5 +85,27 @@
   "visionSubtitle": "Run the marketplace end-to-end today. Tomorrow, AI accelerates every creative and operational decision.",
   "visionPoint1": "Custom AI avatars for briefs and ad copy",
   "visionPoint2": "Conversational agent to design and launch campaigns",
-  "visionPoint3": "Campaign logistics as a service, with real-time recommendations"
+  "visionPoint3": "Campaign logistics as a service, with real-time recommendations",
+  "faqItems": [
+    {
+      "question": "Who is InfluenceHub for?",
+      "answer": "Brands, agencies, and influencers in LATAM who want one flow: discover talent, plan campaigns, and close collaborations without friction."
+    },
+    {
+      "question": "Which countries does the POC cover?",
+      "answer": "Colombia and Venezuela in this phase, with demo data and sample profiles ready for presentations."
+    },
+    {
+      "question": "Is AI available today?",
+      "answer": "The operational marketplace is in POC. AI avatars and the campaign agent are on the roadmap (AI vision) and will roll out in later phases."
+    },
+    {
+      "question": "How do social networks connect?",
+      "answer": "In the POC, connection and metrics are simulated to demonstrate the flow. Real Instagram and TikTok OAuth is planned."
+    },
+    {
+      "question": "Can I try without signing up?",
+      "answer": "Yes: explore the public demo view. To create real campaigns and proposals, sign up as a brand or influencer."
+    }
+  ]
 }

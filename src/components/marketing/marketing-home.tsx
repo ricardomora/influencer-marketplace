@@ -13,6 +13,8 @@ import { MarketingLayout } from "./marketing-layout";
 import { MarketingHeroBackground } from "./marketing-hero-background";
 import { PlatformPreviewMockups } from "./platform-preview-mockups";
 import { MarketingToolsSection } from "./marketing-tools-section";
+import { MarketingFaqSection } from "./marketing-faq-section";
+import { getMarketingFaqItems } from "@/lib/i18n/marketing-faq";
 import { Button } from "@/components/ui/button";
 import { createTranslator, type Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/lib/i18n/types";
@@ -216,6 +218,12 @@ export function MarketingHome({
           </div>
         </div>
       </section>
+
+      <MarketingFaqSection
+        title={t("marketing.faqTitle")}
+        subtitle={t("marketing.faqSubtitle")}
+        items={getMarketingFaqItems(dict)}
+      />
 
       <section
         id="como-funciona"

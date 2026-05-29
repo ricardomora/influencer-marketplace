@@ -32,21 +32,17 @@ Hero interactivo, mockups estáticos, herramientas + visión IA, sin demo funcio
 
 ---
 
-### LAND-008 — Beneficios marca / influencer (bullets)
+### LAND-008 — Beneficios marca / influencer (bullets) ✅
 
-**Priority:** P1 · **Effort:** S
+Sección `#producto` con bullets y CTAs por rol.
 
----
+### LAND-009 — Strip redes ✅
 
-### LAND-009 — Strip redes (Instagram, TikTok, YouTube…)
+Strip bajo el hero (Instagram, TikTok, YouTube, LinkedIn).
 
-**Priority:** P2 · **Effort:** XS
+### LAND-010 — FAQ + CTA final ✅
 
----
-
-### LAND-010 — FAQ + CTA final
-
-**Priority:** P1 · **Effort:** S
+`marketing-faq-section.tsx` + anchor `#faq`.
 
 ---
 
@@ -68,37 +64,32 @@ Actualizar: landing = pitch visual; producto = dashboard + futuros `/demo`.
 
 ## Track B — Demos SocialPubli (cuando UX esté lista)
 
-### DEMO-001 — Hub `/[locale]/demo`
+### DEMO-001 — Hub `/[locale]/demo` ✅
 
-Shell tipo `my_panel`: sidebar Buscar · Campañas · Propuestas · CTA signup. Sin auth.
-
-**Ref:** `socialpubli.com/advertisers/home/my_panel`
+`demo-shell.tsx` + hub + rutas discover / analyzer / campaigns (vistas estáticas, sin auth).
 
 ---
 
-### DEMO-002 — Discover
+### DEMO-002 — Discover (interactivo) 🔄
 
-Réplica pulida de discover: filtros + grid + detalle lateral. Reutilizar patrones de `brand-search-panel` o Convex seed.
+Mejorar `/demo/discover`: filtros vivos, más filas, enlace a signup. Patrón: `brand-search-panel`.
 
-**Ref:** `socialpubli.com/advertisers/discover`  
 **App real:** `/dashboard/brand/search`
 
 ---
 
-### DEMO-003 — Analyzer
+### DEMO-003 — Analyzer ✅ (v1 estática)
 
-Ficha influencer: KPIs, audiencia, redes, gráfico mock.
+`/demo/analyzer` — ficha mock con KPIs y gráfico.
 
-**Ref:** `socialpubli.com/advertisers/analyzer`  
 **App real:** perfil + `socialAccounts` + demographics
 
 ---
 
-### DEMO-004 — Campaign planner (Instagram CM)
+### DEMO-004 — Campaign planner ✅ (v1 estática)
 
-Wizard por pasos: objetivo → presupuesto → fechas → formato → resumen.
+`/demo/campaigns` — wizard mock por pasos.
 
-**Ref:** `socialpubli.com/campaign_planner/instagram_cm`  
 **App real:** `/dashboard/brand/campaigns`
 
 ---

@@ -4,6 +4,7 @@ export type DictionaryNamespace =
   | "dashboard"
   | "onboarding"
   | "auth"
-  | "metadata";
+  | "metadata"
+  | "demo";
 
 export type Dictionary = Record<DictionaryNamespace, Record<string, unknown>>;

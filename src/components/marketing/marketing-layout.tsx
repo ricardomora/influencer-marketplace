@@ -36,6 +36,15 @@ export function MarketingLayout({
             <a href="#como-funciona" className="transition-colors hover:text-white">
               {t("marketing.navHowItWorks")}
             </a>
+            <a href="#faq" className="transition-colors hover:text-white">
+              {t("marketing.navFaq")}
+            </a>
+            <Link
+              href={`/${locale}/demo`}
+              className="transition-colors hover:text-white"
+            >
+              {t("marketing.navDemo")}
+            </Link>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
