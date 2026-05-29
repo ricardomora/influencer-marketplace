@@ -5,7 +5,7 @@ import { useAuthSkip } from "@/hooks/use-auth-skip";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
+import { Panel, PanelBody, PanelHeader } from "@/components/dashboard/dashboard-primitives";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { type Locale, useDictionary } from "@/lib/i18n";
@@ -42,9 +42,9 @@ export function BrandProfileForm({ locale }: { locale: Locale }) {
   if (!t) return null;
 
   return (
-    <Card>
-      <CardTitle>{t("dashboard.brandSection")}</CardTitle>
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+    <Panel>
+      <PanelHeader title={t("dashboard.brandSection")} />
+      <PanelBody className="grid gap-4 sm:grid-cols-2">
         <div>
           <Label>{t("dashboard.companyName")}</Label>
           <Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
@@ -53,10 +53,10 @@ export function BrandProfileForm({ locale }: { locale: Locale }) {
           <Label>{t("dashboard.industry")}</Label>
           <Input value={industry} onChange={(e) => setIndustry(e.target.value)} />
         </div>
-      </div>
-      <Button className="mt-4" onClick={handleSave}>
+      <Button className="sm:col-span-2" onClick={handleSave}>
         {t("common.save")}
       </Button>
-    </Card>
+      </PanelBody>
+    </Panel>
   );
 }

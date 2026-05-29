@@ -1,7 +1,10 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import {
+  DashboardShell,
+  influencerNavIcons,
+} from "@/components/dashboard/dashboard-shell";
 import { InfluencerOverviewPanel } from "@/components/dashboard/influencer-overview-panel";
 import { InfluencerProfileForm } from "@/components/dashboard/influencer-profile-form";
 import { InfluencerProposalsPanel } from "@/components/dashboard/influencer-proposals-panel";
@@ -16,12 +19,26 @@ export default function InfluencerDashboardPage() {
 
   const base = `/${locale}/dashboard/influencer`;
   const nav = [
-    { href: base, label: t?.("dashboard.navOverview") ?? "Overview" },
-    { href: `${base}/profile`, label: t?.("dashboard.navProfile") ?? "Profile" },
-    { href: `${base}/social`, label: t?.("dashboard.navSocial") ?? "Social" },
+    {
+      href: base,
+      label: t?.("dashboard.navOverview") ?? "Overview",
+      exact: true,
+      icon: influencerNavIcons.overview,
+    },
+    {
+      href: `${base}/profile`,
+      label: t?.("dashboard.navProfile") ?? "Profile",
+      icon: influencerNavIcons.profile,
+    },
+    {
+      href: `${base}/social`,
+      label: t?.("dashboard.navSocial") ?? "Social",
+      icon: influencerNavIcons.social,
+    },
     {
       href: `${base}/proposals`,
       label: t?.("dashboard.navProposals") ?? "Proposals",
+      icon: influencerNavIcons.proposals,
     },
   ];
 

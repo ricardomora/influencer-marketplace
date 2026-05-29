@@ -5,6 +5,16 @@ import { useAuthSkip } from "@/hooks/use-auth-skip";
 import { useState } from "react";
 import { toast } from "sonner";
 import { BrandAnalyzerDrawer } from "@/components/dashboard/brand-analyzer-drawer";
+import { BrandFlowStrip } from "@/components/dashboard/brand-flow-strip";
+import {
+  CreatorAvatar,
+  MetricBlock,
+  Panel,
+  PanelBody,
+  PanelHeader,
+  PostThumbPlaceholder,
+} from "@/components/dashboard/dashboard-primitives";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -116,9 +126,13 @@ export function BrandSearchPanel({ locale }: { locale: Locale }) {
 
   if (!t) return null;
 
+  const flowStep = analyzerId ? "analyzer" : "discover";
+
   return (
     <>
-      <div className="mb-6 grid gap-4 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900 sm:grid-cols-2">
+      <BrandFlowStrip locale={locale} active={flowStep} />
+      <Panel className="mb-6">
+        <PanelBody className="grid gap-4 sm:grid-cols-2">
         <div>
           <Label>{t("dashboard.campaigns")}</Label>
           <Select
@@ -143,11 +157,12 @@ export function BrandSearchPanel({ locale }: { locale: Locale }) {
             onChange={(e) => setProposalRate(e.target.value)}
           />
         </div>
-      </div>
+        </PanelBody>
+      </Panel>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <div className="grid lg:grid-cols-[220px_1fr]">
-          <aside className="border-b border-gray-100 bg-gray-50 p-4 lg:border-b-0 lg:border-r dark:border-gray-800 dark:bg-gray-900/80">
+      <Panel>
+        <div className="grid lg:grid-cols-[240px_1fr]">
+          <aside className="border-b border-gray-100 bg-[#f8f9fb] p-5 lg:border-b-0 lg:border-r">
             <p className="text-xs font-semibold uppercase text-gray-500">
               {t("dashboard.searchFilters")}
             </p>
@@ -255,77 +270,97 @@ export function BrandSearchPanel({ locale }: { locale: Locale }) {
             </div>
           </aside>
 
-          <div className="min-w-0 p-4">
-            <p className="mb-3 text-sm font-semibold">
-              {t("dashboard.results")}{" "}
-              <span className="font-normal text-gray-500">
-                ({results?.length ?? 0})
-              </span>
-            </p>
-            {!results?.length ? (
-              <p className="py-8 text-center text-sm text-gray-500">
-                {t("dashboard.noResults")}
-              </p>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="text-xs uppercase text-gray-500">
-                      <th className="pb-2 pr-4">{t("dashboard.colCreator")}</th>
-                      <th className="pb-2 pr-4">{t("dashboard.colFollowers")}</th>
-                      <th className="pb-2 pr-4">{t("dashboard.colEr")}</th>
-                      <th className="pb-2">{t("dashboard.colActions")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {results.map(({ profile, primaryAccount }) => (
-                      <tr
-                        key={profile._id}
-                        className="cursor-pointer border-t border-gray-100 hover:bg-indigo-50/50 dark:border-gray-800 dark:hover:bg-indigo-950/30"
-                        onClick={() => setAnalyzerId(profile._id)}
+          <div className="min-w-0 p-5">
+            <PanelHeader
+              title={t("dashboard.results")}
+              subtitle={t("dashboard.resultsCount", {
+                count: String(results?.length ?? 0),
+              })}
+            />
+            <PanelBody className="pt-0">
+              {!results?.length ? (
+                <p className="py-12 text-center text-sm text-gray-500">
+                  {t("dashboard.noResults")}
+                </p>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  {results.map(({ profile, primaryAccount }) => (
+                    <article
+                      key={profile._id}
+                      className="cursor-pointer rounded-xl border border-gray-200/90 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+                      onClick={() => setAnalyzerId(profile._id)}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex min-w-0 gap-3">
+                          <CreatorAvatar name={profile.displayName} />
+                          <div className="min-w-0">
+                            <p className="truncate font-semibold text-gray-900">
+                              {profile.displayName}
+                            </p>
+                            <p className="truncate text-xs text-gray-500">
+                              {profile.city}, {profile.country}
+                            </p>
+                            <Badge className="mt-1 text-[10px]">{profile.category}</Badge>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-4 grid grid-cols-3 gap-2 border-y border-gray-100 py-3">
+                        <MetricBlock
+                          label={t("dashboard.colFollowers")}
+                          value={
+                            primaryAccount
+                              ? formatCount(primaryAccount.followers)
+                              : "—"
+                          }
+                        />
+                        <MetricBlock
+                          label={t("dashboard.analyzerReach")}
+                          value={
+                            primaryAccount
+                              ? formatCount(primaryAccount.avgViews)
+                              : "—"
+                          }
+                        />
+                        <MetricBlock
+                          label={t("dashboard.colEr")}
+                          value={
+                            primaryAccount
+                              ? `${primaryAccount.engagementRate}%`
+                              : "—"
+                          }
+                          highlight
+                        />
+                      </div>
+                      <div className="mt-3 flex justify-center gap-2">
+                        {[0, 1, 2].map((i) => (
+                          <PostThumbPlaceholder key={i} index={i} />
+                        ))}
+                      </div>
+                      <Button
+                        size="sm"
+                        className="mt-4 w-full"
+                        variant="outline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          void handleProposal(profile._id);
+                        }}
                       >
-                        <td className="py-3 pr-4">
-                          <p className="font-medium">{profile.displayName}</p>
-                          <p className="text-xs text-gray-500">
-                            {profile.city}, {profile.country}
-                          </p>
-                        </td>
-                        <td className="py-3 pr-4 tabular-nums">
-                          {primaryAccount
-                            ? formatCount(primaryAccount.followers)
-                            : "—"}
-                        </td>
-                        <td className="py-3 pr-4 tabular-nums text-emerald-600">
-                          {primaryAccount
-                            ? `${primaryAccount.engagementRate}%`
-                            : "—"}
-                        </td>
-                        <td className="py-3">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              void handleProposal(profile._id);
-                            }}
-                          >
-                            {t("common.sendProposal")}
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                        {t("common.sendProposal")}
+                      </Button>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </PanelBody>
           </div>
         </div>
-      </div>
+      </Panel>
 
       {analyzerId && (
         <BrandAnalyzerDrawer
           locale={locale}
           profileId={analyzerId}
+          hasCampaign={Boolean(selectedCampaign)}
           onClose={() => setAnalyzerId(null)}
           onSendProposal={() => void handleProposal(analyzerId)}
         />

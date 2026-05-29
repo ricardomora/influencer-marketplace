@@ -4,8 +4,9 @@ import { useMutation, useQuery } from "convex/react";
 import { useAuthSkip } from "@/hooks/use-auth-skip";
 import { useState } from "react";
 import { toast } from "sonner";
+import { InfluencerProfileChecklist } from "@/components/dashboard/influencer-profile-checklist";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
+import { Panel, PanelBody, PanelHeader } from "@/components/dashboard/dashboard-primitives";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -66,8 +67,11 @@ export function InfluencerProfileForm({ locale }: { locale: Locale }) {
   if (!t) return null;
 
   return (
-    <Card>
-      <CardTitle>{t("dashboard.profileSection")}</CardTitle>
+    <div className="space-y-6">
+      <InfluencerProfileChecklist locale={locale} />
+      <Panel>
+      <PanelHeader title={t("dashboard.profileSection")} />
+      <PanelBody>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div>
           <Label>{t("dashboard.displayName")}</Label>
@@ -118,6 +122,8 @@ export function InfluencerProfileForm({ locale }: { locale: Locale }) {
       <Button className="mt-4" onClick={handleSave}>
         {t("common.save")}
       </Button>
-    </Card>
+    </PanelBody>
+    </Panel>
+    </div>
   );
 }

@@ -5,12 +5,28 @@ import { useQuery } from "convex/react";
 import { useAuthSkip } from "@/hooks/use-auth-skip";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  FileText,
+  LayoutDashboard,
+  Megaphone,
+  Search,
+  Share2,
+  Shield,
+  User,
+  type LucideIcon,
+} from "lucide-react";
 import { BRAND } from "@/lib/brand";
+import { isDashboardNavActive } from "@/lib/dashboard/nav-active";
 import { type Locale, useDictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { api } from "../../../convex/_generated/api";
 
-type NavItem = { href: string; label: string };
+type NavItem = {
+  href: string;
+  label: string;
+  exact?: boolean;
+  icon?: LucideIcon;
+};
 
 export function DashboardShell({
   locale,
@@ -30,46 +46,88 @@ export function DashboardShell({
   const authSkip = useAuthSkip();
   const user = useQuery(api.users.current, authSkip);
 
+  const roleLabel =
+    role === "brand"
+      ? t?.("dashboard.brandTitle")
+      : role === "influencer"
+        ? t?.("dashboard.influencerTitle")
+        : t?.("dashboard.adminTitle");
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <header className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <Link href={`/${locale}`} className="font-semibold text-indigo-600">
+    <div className="flex min-h-screen bg-[#eef0f3]">
+      <aside className="flex w-[240px] shrink-0 flex-col bg-[#1b1f24] text-white">
+        <div className="border-b border-white/10 px-5 py-5">
+          <Link
+            href={`/${locale}`}
+            className="text-lg font-semibold tracking-tight text-white hover:text-indigo-200"
+          >
             {BRAND.name}
           </Link>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500">{user?.email}</span>
+          <p className="mt-1 text-xs text-white/50">{roleLabel ?? role}</p>
+        </div>
+        <nav className="flex-1 space-y-0.5 px-3 py-4">
+          {navItems.map((item) => {
+            const active = isDashboardNavActive(
+              pathname,
+              item.href,
+              item.exact ?? false,
+            );
+            const Icon = item.icon ?? LayoutDashboard;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-white/12 text-white"
+                    : "text-white/70 hover:bg-white/8 hover:text-white",
+                )}
+              >
+                <Icon className="size-4 shrink-0 opacity-90" aria-hidden />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="border-t border-white/10 px-5 py-4 text-xs text-white/40">
+          LATAM · POC
+        </div>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="flex h-14 shrink-0 items-center justify-between border-b border-gray-200/80 bg-white px-6 shadow-sm">
+          <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
+          <div className="flex items-center gap-3">
+            <span className="hidden max-w-[200px] truncate text-sm text-gray-500 sm:inline">
+              {user?.email}
+            </span>
             <UserButton />
           </div>
-        </div>
-      </header>
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[220px_1fr]">
-        <aside className="space-y-1">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
-            {role}
-          </p>
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "block rounded-lg px-3 py-2 text-sm font-medium",
-                pathname === item.href
-                  ? "bg-indigo-600 text-white"
-                  : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800",
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </aside>
-        <main>
-          <h1 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-50">
-            {title}
-          </h1>
+        </header>
+        <main className="flex-1 overflow-auto p-6">
           {!t ? <p className="text-gray-500">…</p> : children}
         </main>
       </div>
     </div>
   );
 }
+
+export const brandNavIcons = {
+  overview: LayoutDashboard,
+  profile: User,
+  search: Search,
+  campaigns: Megaphone,
+  proposals: FileText,
+} as const;
+
+export const influencerNavIcons = {
+  overview: LayoutDashboard,
+  profile: User,
+  social: Share2,
+  proposals: FileText,
+} as const;
+
+export const adminNavIcons = {
+  overview: Shield,
+} as const;

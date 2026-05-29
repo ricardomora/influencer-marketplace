@@ -152,6 +152,24 @@ Filtros por estado, badges, fechas en `brand-proposals-panel.tsx`.
 
 ---
 
+### DASH-006 — Demographics en analyzer ✅
+
+`getProfileById` + `audienceDemographics` en `brand-analyzer-drawer.tsx`.
+
+---
+
+### DASH-007 — Nav activa en subrutas ✅
+
+`isDashboardNavActive` + `exact` en overview del shell.
+
+---
+
+### DASH-008 — Flujo Discover → Analyzer → Propuesta ✅
+
+`brand-flow-strip.tsx` en search y proposals; drawer enlaza campañas/propuestas.
+
+---
+
 ## Track E — Dashboard influencer (logueado)
 
 ### INFL-001 — Overview influencer ✅
@@ -168,6 +186,12 @@ Filtros, estados i18n, accept/reject con toasts en `influencer-proposals-panel.t
 
 ---
 
+### INFL-004 — Checklist de perfil ✅
+
+`influencer-profile-checklist.tsx` en `/dashboard/influencer/profile`.
+
+---
+
 ## Sprint sugerido
 
 | Fase | Enfoque | Issues |
@@ -175,7 +199,7 @@ Filtros, estados i18n, accept/reject con toasts en `influencer-proposals-panel.t
 | **Hecho** | Vender (público) | LAND-*, DEMO-* v1 |
 | **Hecho** | Marca logueada | DASH-001 → DASH-005 |
 | **Hecho** | Influencer logueado | INFL-001 → INFL-003 |
-| **Siguiente** | Pulir / E2E | demographics reales, nav activa, DEMO-006 opcional |
+| **Siguiente** | Opcional | DEMO-006 Convex público, `metadataBase` prod |
 | **Fase 2** | IA | AI-* (solo con OK) |
 
 ---

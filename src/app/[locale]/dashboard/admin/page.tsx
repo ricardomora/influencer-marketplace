@@ -2,7 +2,10 @@
 
 import { useParams } from "next/navigation";
 import { AdminOverview } from "@/components/dashboard/admin-overview";
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import {
+  DashboardShell,
+  adminNavIcons,
+} from "@/components/dashboard/dashboard-shell";
 import { type Locale, useDictionary } from "@/lib/i18n";
 
 export default function AdminDashboardPage() {
@@ -19,6 +22,8 @@ export default function AdminDashboardPage() {
         {
           href: `/${locale}/dashboard/admin`,
           label: t?.("dashboard.navAdmin") ?? "Admin",
+          exact: true,
+          icon: adminNavIcons.overview,
         },
       ]}
     >

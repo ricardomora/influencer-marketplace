@@ -5,7 +5,8 @@ import { useQuery } from "convex/react";
 import { useAuthSkip } from "@/hooks/use-auth-skip";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
+import { ListRow, Panel, PanelBody, PanelHeader } from "@/components/dashboard/dashboard-primitives";
+import { BrandFlowStrip } from "@/components/dashboard/brand-flow-strip";
 import { proposalStatusLabel } from "@/lib/dashboard/proposal-status";
 import { type Locale, useDictionary } from "@/lib/i18n";
 import { api } from "../../../convex/_generated/api";
@@ -34,9 +35,12 @@ export function BrandProposalsPanel({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <Card>
-      <CardTitle>{t("dashboard.sentProposals")}</CardTitle>
-      <div className="mt-4 flex flex-wrap gap-2">
+    <>
+      <BrandFlowStrip locale={locale} active="proposal" />
+      <Panel>
+      <PanelHeader title={t("dashboard.sentProposals")} />
+      <PanelBody>
+      <div className="mb-4 flex flex-wrap gap-2">
         {tabs.map((tab) => (
           <Button
             key={tab.id}
@@ -51,36 +55,33 @@ export function BrandProposalsPanel({ locale }: { locale: Locale }) {
       {!filtered.length ? (
         <p className="mt-4 text-sm text-gray-500">{t("dashboard.noProposals")}</p>
       ) : (
-        <ul className="mt-4 space-y-3">
+        <ul className="space-y-2">
           {filtered.map(({ proposal, campaign, influencer }) => (
-            <li
-              key={proposal._id}
-              className="rounded-lg border p-4 dark:border-gray-800"
-            >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-medium">{influencer?.displayName}</span>
-                <Badge
-                  className={cn(
-                    proposal.status === "ACCEPTED" && "bg-emerald-600",
-                    proposal.status === "REJECTED" && "bg-red-600",
-                    proposal.status === "PENDING" && "bg-amber-600",
-                  )}
-                >
-                  {proposalStatusLabel(t, proposal.status)}
-                </Badge>
-              </div>
-              <p className="text-sm text-gray-600">{campaign.title}</p>
-              <p className="text-sm font-medium">${proposal.rate} USD</p>
-              {proposal.message && (
-                <p className="mt-2 text-sm text-gray-500">{proposal.message}</p>
-              )}
-              <p className="mt-2 text-xs text-gray-400">
-                {new Date(proposal.createdAt).toLocaleDateString(locale)}
-              </p>
+            <li key={proposal._id}>
+              <ListRow
+                title={influencer?.displayName ?? "—"}
+                meta={`${campaign.title} · ${new Date(proposal.createdAt).toLocaleDateString(locale)}`}
+                trailing={
+                  <div className="flex flex-col items-end gap-1">
+                    <Badge
+                      className={cn(
+                        proposal.status === "ACCEPTED" && "bg-emerald-600",
+                        proposal.status === "REJECTED" && "bg-red-600",
+                        proposal.status === "PENDING" && "bg-amber-600",
+                      )}
+                    >
+                      {proposalStatusLabel(t, proposal.status)}
+                    </Badge>
+                    <span className="text-sm font-medium">${proposal.rate}</span>
+                  </div>
+                }
+              />
             </li>
           ))}
         </ul>
       )}
-    </Card>
+      </PanelBody>
+    </Panel>
+    </>
   );
 }

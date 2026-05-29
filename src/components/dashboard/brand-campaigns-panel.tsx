@@ -6,7 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
+import { ListRow, Panel, PanelBody, PanelHeader } from "@/components/dashboard/dashboard-primitives";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -50,9 +50,10 @@ export function BrandCampaignsPanel({ locale }: { locale: Locale }) {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardTitle>{t("dashboard.campaignWizardTitle")}</CardTitle>
-        <ol className="mt-4 flex flex-wrap gap-2">
+      <Panel>
+        <PanelHeader title={t("dashboard.campaignWizardTitle")} />
+        <PanelBody>
+        <ol className="flex flex-wrap gap-2">
           {WIZARD_STEPS.map((key, i) => (
             <li
               key={key}
@@ -132,22 +133,25 @@ export function BrandCampaignsPanel({ locale }: { locale: Locale }) {
             </Button>
           )}
         </div>
-      </Card>
+        </PanelBody>
+      </Panel>
 
-      <ul className="space-y-3">
+      <Panel>
+        <PanelHeader title={t("dashboard.navCampaigns")} />
+        <PanelBody>
+      <ul className="space-y-2">
         {(campaigns ?? []).map((c) => (
           <li key={c._id}>
-            <Card>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">{c.title}</span>
-                <Badge>{campaignStatusLabel(t, c.status)}</Badge>
-              </div>
-              <p className="mt-2 text-sm text-gray-600">{c.briefText}</p>
-              <p className="mt-1 text-sm">${c.budget} USD</p>
-            </Card>
+            <ListRow
+              title={c.title}
+              meta={`${campaignStatusLabel(t, c.status)} · $${c.budget} USD`}
+              trailing={<Badge>{campaignStatusLabel(t, c.status)}</Badge>}
+            />
           </li>
         ))}
       </ul>
+        </PanelBody>
+      </Panel>
     </div>
   );
 }

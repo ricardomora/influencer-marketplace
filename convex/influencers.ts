@@ -100,7 +100,20 @@ export const getProfileById = query({
       .withIndex("by_influencerId", (q) => q.eq("influencerId", profile._id))
       .collect();
 
-    return { profile, socialAccounts };
+    const primaryId = profile.primarySocialAccountId;
+    const primaryAccount =
+      socialAccounts.find((a) => a._id === primaryId) ?? socialAccounts[0];
+
+    const demographics = primaryAccount
+      ? await ctx.db
+          .query("audienceDemographics")
+          .withIndex("by_socialAccountId", (q) =>
+            q.eq("socialAccountId", primaryAccount._id),
+          )
+          .collect()
+      : [];
+
+    return { profile, socialAccounts, primaryAccount, demographics };
   },
 });
 

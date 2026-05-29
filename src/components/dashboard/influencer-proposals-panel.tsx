@@ -4,9 +4,9 @@ import { useMemo, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { useAuthSkip } from "@/hooks/use-auth-skip";
 import { toast } from "sonner";
+import { ListRow, Panel, PanelBody, PanelHeader } from "@/components/dashboard/dashboard-primitives";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
 import { proposalStatusLabel } from "@/lib/dashboard/proposal-status";
 import { type Locale, useDictionary } from "@/lib/i18n";
 import { api } from "../../../convex/_generated/api";
@@ -37,82 +37,90 @@ export function InfluencerProposalsPanel({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <Card>
-      <CardTitle>{t("dashboard.incomingProposals")}</CardTitle>
-      <p className="mt-1 text-sm text-gray-500">{t("dashboard.incomingProposalsHint")}</p>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {tabs.map((tab) => (
-          <Button
-            key={tab.id}
-            size="sm"
-            variant={filter === tab.id ? "default" : "outline"}
-            onClick={() => setFilter(tab.id)}
-          >
-            {tab.label}
-          </Button>
-        ))}
-      </div>
-      {!filtered.length ? (
-        <p className="mt-4 text-sm text-gray-500">{t("dashboard.noProposals")}</p>
-      ) : (
-        <ul className="mt-4 space-y-4">
-          {filtered.map(({ proposal, campaign, brand }) => (
-            <li
-              key={proposal._id}
-              className="rounded-lg border border-gray-200 p-4 dark:border-gray-800"
+    <Panel>
+      <PanelHeader
+        title={t("dashboard.incomingProposals")}
+        subtitle={t("dashboard.incomingProposalsHint")}
+      />
+      <PanelBody>
+        <div className="mb-4 flex flex-wrap gap-2">
+          {tabs.map((tab) => (
+            <Button
+              key={tab.id}
+              size="sm"
+              variant={filter === tab.id ? "default" : "outline"}
+              onClick={() => setFilter(tab.id)}
             >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-semibold">{campaign.title}</span>
-                <Badge
-                  className={cn(
-                    proposal.status === "ACCEPTED" && "bg-emerald-600",
-                    proposal.status === "REJECTED" && "bg-red-600",
-                    proposal.status === "PENDING" && "bg-amber-600",
-                  )}
-                >
-                  {proposalStatusLabel(t, proposal.status)}
-                </Badge>
-              </div>
-              <p className="text-sm text-gray-600">{brand?.companyName}</p>
-              <p className="mt-2 text-sm font-medium">${proposal.rate} USD</p>
-              {proposal.message && (
-                <p className="mt-2 text-sm text-gray-500">{proposal.message}</p>
-              )}
-              {proposal.status === "PENDING" && (
-                <div className="mt-3 flex gap-2">
-                  <Button
-                    size="sm"
-                    onClick={async () => {
-                      try {
-                        await accept({ proposalId: proposal._id });
-                        toast.success(t?.("dashboard.proposalAccepted") ?? "");
-                      } catch (e) {
-                        toast.error(e instanceof Error ? e.message : "Error");
-                      }
-                    }}
-                  >
-                    {t("common.accept")}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={async () => {
-                      try {
-                        await reject({ proposalId: proposal._id });
-                        toast.success(t?.("dashboard.proposalRejected") ?? "");
-                      } catch (e) {
-                        toast.error(e instanceof Error ? e.message : "Error");
-                      }
-                    }}
-                  >
-                    {t("common.reject")}
-                  </Button>
-                </div>
-              )}
-            </li>
+              {tab.label}
+            </Button>
           ))}
-        </ul>
-      )}
-    </Card>
+        </div>
+        {!filtered.length ? (
+          <p className="text-sm text-gray-500">{t("dashboard.noProposals")}</p>
+        ) : (
+          <ul className="space-y-3">
+            {filtered.map(({ proposal, campaign, brand }) => (
+              <li
+                key={proposal._id}
+                className="rounded-xl border border-gray-100 bg-gray-50/60 p-4"
+              >
+                <ListRow
+                  title={campaign.title}
+                  meta={brand?.companyName}
+                  trailing={
+                    <Badge
+                      className={cn(
+                        proposal.status === "ACCEPTED" && "bg-emerald-600",
+                        proposal.status === "REJECTED" && "bg-red-600",
+                        proposal.status === "PENDING" && "bg-amber-600",
+                      )}
+                    >
+                      {proposalStatusLabel(t, proposal.status)}
+                    </Badge>
+                  }
+                />
+                <p className="mt-2 text-sm font-medium text-gray-900">
+                  ${proposal.rate} USD
+                </p>
+                {proposal.message && (
+                  <p className="mt-2 text-sm text-gray-500">{proposal.message}</p>
+                )}
+                {proposal.status === "PENDING" && (
+                  <div className="mt-3 flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={async () => {
+                        try {
+                          await accept({ proposalId: proposal._id });
+                          toast.success(t?.("dashboard.proposalAccepted") ?? "");
+                        } catch (e) {
+                          toast.error(e instanceof Error ? e.message : "Error");
+                        }
+                      }}
+                    >
+                      {t("common.accept")}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                        try {
+                          await reject({ proposalId: proposal._id });
+                          toast.success(t?.("dashboard.proposalRejected") ?? "");
+                        } catch (e) {
+                          toast.error(e instanceof Error ? e.message : "Error");
+                        }
+                      }}
+                    >
+                      {t("common.reject")}
+                    </Button>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </PanelBody>
+    </Panel>
   );
 }

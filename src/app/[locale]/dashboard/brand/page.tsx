@@ -6,7 +6,10 @@ import { BrandOverviewPanel } from "@/components/dashboard/brand-overview-panel"
 import { BrandProfileForm } from "@/components/dashboard/brand-profile-form";
 import { BrandProposalsPanel } from "@/components/dashboard/brand-proposals-panel";
 import { BrandSearchPanel } from "@/components/dashboard/brand-search-panel";
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import {
+  DashboardShell,
+  brandNavIcons,
+} from "@/components/dashboard/dashboard-shell";
 import { type Locale, useDictionary } from "@/lib/i18n";
 
 export default function BrandDashboardPage() {
@@ -17,16 +20,31 @@ export default function BrandDashboardPage() {
 
   const base = `/${locale}/dashboard/brand`;
   const nav = [
-    { href: base, label: t?.("dashboard.navOverview") ?? "Overview" },
-    { href: `${base}/profile`, label: t?.("dashboard.navProfile") ?? "Profile" },
-    { href: `${base}/search`, label: t?.("dashboard.navSearch") ?? "Search" },
+    {
+      href: base,
+      label: t?.("dashboard.navOverview") ?? "Overview",
+      exact: true,
+      icon: brandNavIcons.overview,
+    },
+    {
+      href: `${base}/profile`,
+      label: t?.("dashboard.navProfile") ?? "Profile",
+      icon: brandNavIcons.profile,
+    },
+    {
+      href: `${base}/search`,
+      label: t?.("dashboard.navSearch") ?? "Search",
+      icon: brandNavIcons.search,
+    },
     {
       href: `${base}/campaigns`,
       label: t?.("dashboard.navCampaigns") ?? "Campaigns",
+      icon: brandNavIcons.campaigns,
     },
     {
       href: `${base}/proposals`,
       label: t?.("dashboard.navProposals") ?? "Proposals",
+      icon: brandNavIcons.proposals,
     },
   ];
 

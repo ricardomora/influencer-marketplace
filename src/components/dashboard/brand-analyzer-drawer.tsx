@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useQuery } from "convex/react";
 import { useAuthSkip } from "@/hooks/use-auth-skip";
 import { Button } from "@/components/ui/button";
+import { summarizeDemographics } from "@/lib/dashboard/format-demographics";
 import { type Locale, useDictionary } from "@/lib/i18n";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
@@ -16,11 +18,13 @@ function formatCount(n: number) {
 export function BrandAnalyzerDrawer({
   locale,
   profileId,
+  hasCampaign,
   onClose,
   onSendProposal,
 }: {
   locale: Locale;
   profileId: Id<"influencerProfiles">;
+  hasCampaign: boolean;
   onClose: () => void;
   onSendProposal: () => void;
 }) {
@@ -33,7 +37,9 @@ export function BrandAnalyzerDrawer({
   if (!t) return null;
 
   const profile = data?.profile;
-  const primary = data?.socialAccounts?.[0];
+  const primary = data?.primaryAccount ?? data?.socialAccounts?.[0];
+  const audience = summarizeDemographics(data?.demographics ?? []);
+  const base = `/${locale}/dashboard/brand`;
 
   return (
     <div
@@ -43,7 +49,7 @@ export function BrandAnalyzerDrawer({
       onClick={onClose}
     >
       <div
-        className="h-full w-full max-w-md overflow-y-auto bg-white p-6 shadow-2xl dark:bg-gray-900"
+        className="h-full w-full max-w-md overflow-y-auto border-l border-gray-200 bg-white p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-4">
@@ -86,6 +92,39 @@ export function BrandAnalyzerDrawer({
               </div>
             )}
 
+            {audience && (
+              <div className="mt-6 rounded-lg border border-gray-100 p-4 dark:border-gray-800">
+                <p className="text-sm font-semibold">{t("dashboard.analyzerAudience")}</p>
+                <ul className="mt-2 space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                  {audience.womenPct !== undefined && (
+                    <li>
+                      {t("dashboard.audienceWomen", { pct: String(audience.womenPct) })}
+                    </li>
+                  )}
+                  {audience.menPct !== undefined && (
+                    <li>
+                      {t("dashboard.audienceMen", { pct: String(audience.menPct) })}
+                    </li>
+                  )}
+                  {audience.topAge && (
+                    <li>
+                      {t("dashboard.audienceAge", { range: audience.topAge })}
+                    </li>
+                  )}
+                  {audience.topCountry && (
+                    <li>
+                      {t("dashboard.audienceCountry", { country: audience.topCountry })}
+                    </li>
+                  )}
+                </ul>
+                {!data?.demographics?.length && (
+                  <p className="mt-2 text-xs text-gray-400">
+                    {t("dashboard.audienceNoData")}
+                  </p>
+                )}
+              </div>
+            )}
+
             {data?.socialAccounts && data.socialAccounts.length > 0 && (
               <div className="mt-6">
                 <p className="text-sm font-semibold">{t("dashboard.analyzerNetworks")}</p>
@@ -100,8 +139,23 @@ export function BrandAnalyzerDrawer({
               </div>
             )}
 
-            <div className="mt-8">
-              <Button onClick={onSendProposal}>{t("common.sendProposal")}</Button>
+            <div className="mt-8 space-y-3">
+              {!hasCampaign && (
+                <p className="text-sm text-amber-700 dark:text-amber-300">
+                  {t("dashboard.flowNeedCampaign")}{" "}
+                  <Link href={`${base}/campaigns`} className="font-medium underline">
+                    {t("dashboard.navCampaigns")}
+                  </Link>
+                </p>
+              )}
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={onSendProposal} disabled={!hasCampaign}>
+                  {t("common.sendProposal")}
+                </Button>
+                <Link href={`${base}/proposals`}>
+                  <Button variant="outline">{t("dashboard.flowViewProposals")}</Button>
+                </Link>
+              </div>
             </div>
           </>
         )}

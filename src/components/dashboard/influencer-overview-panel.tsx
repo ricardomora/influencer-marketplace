@@ -3,8 +3,14 @@
 import Link from "next/link";
 import { useQuery } from "convex/react";
 import { useAuthSkip } from "@/hooks/use-auth-skip";
+import {
+  ListRow,
+  Panel,
+  PanelBody,
+  PanelHeader,
+  StatCard,
+} from "@/components/dashboard/dashboard-primitives";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
 import { proposalStatusLabel } from "@/lib/dashboard/proposal-status";
 import { type Locale, useDictionary } from "@/lib/i18n";
 import { api } from "../../../convex/_generated/api";
@@ -42,16 +48,18 @@ export function InfluencerOverviewPanel({ locale }: { locale: Locale }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-3">
-        {[
-          [String(pending), t("dashboard.statPendingIncoming")],
-          [String(accounts?.length ?? 0), t("dashboard.statConnectedAccounts")],
-          [`${profileComplete}%`, t("dashboard.statProfileComplete")],
-        ].map(([value, label]) => (
-          <Card key={label}>
-            <p className="text-3xl font-bold text-indigo-600">{value}</p>
-            <p className="mt-1 text-sm text-gray-500">{label}</p>
-          </Card>
-        ))}
+        <StatCard
+          value={String(pending)}
+          label={t("dashboard.statPendingIncoming")}
+        />
+        <StatCard
+          value={String(accounts?.length ?? 0)}
+          label={t("dashboard.statConnectedAccounts")}
+        />
+        <StatCard
+          value={`${profileComplete}%`}
+          label={t("dashboard.statProfileComplete")}
+        />
       </div>
 
       <div className="flex flex-wrap gap-3">
@@ -66,27 +74,27 @@ export function InfluencerOverviewPanel({ locale }: { locale: Locale }) {
         </Link>
       </div>
 
-      <Card>
-        <CardTitle>{t("dashboard.incomingProposals")}</CardTitle>
-        {!recent.length ? (
-          <p className="mt-4 text-sm text-gray-500">{t("dashboard.noProposals")}</p>
-        ) : (
-          <ul className="mt-4 space-y-3">
-            {recent.map(({ proposal, campaign, brand }) => (
-              <li
-                key={proposal._id}
-                className="rounded-lg border border-gray-100 p-3 dark:border-gray-800"
-              >
-                <p className="font-medium">{campaign.title}</p>
-                <p className="text-xs text-gray-500">{brand?.companyName}</p>
-                <p className="text-xs text-indigo-600">
-                  {proposalStatusLabel(t, proposal.status)} · ${proposal.rate}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
+      <Panel>
+        <PanelHeader title={t("dashboard.incomingProposals")} />
+        <PanelBody>
+          {!recent.length ? (
+            <p className="text-sm text-gray-500">{t("dashboard.noProposals")}</p>
+          ) : (
+            <ul className="space-y-2">
+              {recent.map(({ proposal, campaign, brand }) => (
+                <ListRow
+                  key={proposal._id}
+                  title={campaign.title}
+                  meta={`${brand?.companyName} · ${proposalStatusLabel(t, proposal.status)}`}
+                  trailing={
+                    <span className="text-sm font-medium">${proposal.rate}</span>
+                  }
+                />
+              ))}
+            </ul>
+          )}
+        </PanelBody>
+      </Panel>
     </div>
   );
 }

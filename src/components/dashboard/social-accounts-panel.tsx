@@ -6,7 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
+import { Panel, PanelBody, PanelHeader } from "@/components/dashboard/dashboard-primitives";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -58,9 +58,9 @@ export function SocialAccountsPanel({ locale }: { locale: Locale }) {
       <p className="text-sm text-gray-600 dark:text-gray-400">
         {t("dashboard.socialConnectHint")}
       </p>
-      <Card>
-        <CardTitle>{t("dashboard.navSocial")}</CardTitle>
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+      <Panel>
+        <PanelHeader title={t("dashboard.navSocial")} />
+        <PanelBody className="grid gap-4 sm:grid-cols-3">
           <div>
             <Label>{t("dashboard.platform")}</Label>
             <Select
@@ -82,15 +82,16 @@ export function SocialAccountsPanel({ locale }: { locale: Locale }) {
               placeholder="@creator"
             />
           </div>
-        </div>
-        <Button className="mt-4" onClick={handleConnect}>
+        <Button className="sm:col-span-3" onClick={handleConnect}>
           {t("common.connect")}
         </Button>
-      </Card>
+        </PanelBody>
+      </Panel>
 
       <div className="grid gap-4 md:grid-cols-2">
         {(accounts ?? []).map((account) => (
-          <Card key={account._id}>
+          <Panel key={account._id}>
+            <PanelBody>
             <div className="flex items-center justify-between">
               <span className="font-semibold">{account.platform}</span>
               {account.isMock && <Badge>mock</Badge>}
@@ -114,7 +115,8 @@ export function SocialAccountsPanel({ locale }: { locale: Locale }) {
             >
               {t("common.syncMetrics")}
             </Button>
-          </Card>
+            </PanelBody>
+          </Panel>
         ))}
       </div>
     </div>
