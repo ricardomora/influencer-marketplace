@@ -39,7 +39,7 @@ export function DashboardShell({
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">{user?.email}</span>
-            <UserButton afterSignOutUrl={`/${locale}`} />
+            <UserButton />
           </div>
         </div>
       </header>
