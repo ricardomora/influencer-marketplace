@@ -8,14 +8,17 @@ description: >-
 
 # InfluenceHub Landing & Platform Presentation
 
-## Two tracks (do not mix)
+## Three surfaces (do not mix goals)
 
-| Track | Goal | Where |
-|-------|------|--------|
-| **A — Landing** | Convencer marcas/agencias: diseño premium, futurista, confianza | `/[locale]` |
-| **B — Product demos** | Emular panel SocialPubli cuando la UX esté pulida | `/[locale]/demo/*` y dashboard real |
+| Track | Goal | Where | When |
+|-------|------|--------|------|
+| **A — Landing** | Convencer: diseño premium, visión IA | `/[locale]` | Now |
+| **B — Public demo** | Vitrina sin login para el socio | `/[locale]/demo/*` | Now (presentation only) |
+| **D/E — Logged-in app** | Producto real: Convex, auth, CRUD | `/[locale]/dashboard/*` | **Planned next** |
 
-**User decision:** El landing **no** incluye demo funcional (tabla/buscador). Solo previews visuales estáticos + copy. Ver [reference-socialpubli.md](./reference-socialpubli.md).
+**User decision:** Cambios “de sistema” (marcas e influencers logueados) van en **dashboard**, no en landing ni demo. La demo puede quedarse estática si el dashboard ya cubre el flujo.
+
+See [docs/PRODUCT-ROADMAP.md](../../../docs/PRODUCT-ROADMAP.md) and issues `DASH-*` / `INFL-*`.
 
 ## Brand voice (público)
 

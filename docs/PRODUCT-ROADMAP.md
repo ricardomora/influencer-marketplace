@@ -1,67 +1,101 @@
 # InfluenceHub — Plan de producto
 
-Última actualización: alineado con posicionamiento **nueva generación + IA**, sin referencias públicas a competidores.
+Última actualización: dos superficies — **pública (venta)** vs **app logueada (producto real)**.
 
 ## Visión
 
 Marketplace de influencer marketing **LATAM-first**, stack unificado y preparado para **IA nativa**: avatares que ayudan con briefs y pautas, y un agente que asiste a marcas en diseño y logística de campañas.
 
+## Dos superficies (decisión de arquitectura)
+
+| Superficie | Quién | Para qué | Cuándo priorizamos |
+|------------|--------|----------|-------------------|
+| **Landing** `/[locale]` | Público | Convencer agencias/clientes — diseño premium, visión IA | **Ahora** |
+| **Demo** `/[locale]/demo/*` | Público (sin login) | Mostrar flujos tipo panel anunciante (Discover, Analyzer, Campaign planner) | **Ahora** — pulir presentación |
+| **Dashboard** `/[locale]/dashboard/*` | Marca / influencer / admin **logueados** | Operar de verdad: búsqueda, campañas, propuestas, perfiles | **Después** — aquí va la paridad “de sistema” |
+
+Los cambios “de verdad” (datos Convex, permisos, envío de propuestas, UX avanzada) se planifican en el **dashboard autenticado**, no en la demo ni en el landing.
+
+```
+Público                    Registro              Producto real
+────────                   ────────              ─────────────
+/es  (landing)      →     /signup      →     /dashboard/brand/*
+/es/demo/*  (vitrina)                         /dashboard/influencer/*
+```
+
 ## Principios de comunicación
 
 | Hacer | No hacer |
 |-------|----------|
-| Hablar de tecnología de punta, integración, LATAM | Nombrar SocialPubli, Fluvip u otros en UI pública |
+| Hablar de tecnología de punta, integración, LATAM | Nombrar competidores en UI pública |
 | Etiquetar **En POC** / **Visión IA** / **Próximamente** | Prometer IA en vivo antes de implementarla |
-| Usar referentes solo en docs internos del equipo | Copiar URLs o marca de competidores |
+| Demo = “vista de presentación” | Confundir demo pública con el panel operativo |
 
 Referencias internas de UX: `.agents/skills/influencehub-landing/reference-socialpubli.md`
 
+## Mapeo demo → dashboard (producto logueado)
+
+| Vista demo (pública) | Ruta app real (marca logueada) | Estado POC |
+|----------------------|--------------------------------|------------|
+| `/demo` hub | `/dashboard/brand` | Shell básico ✅ |
+| `/demo/discover` | `/dashboard/brand/search` | Funcional ✅ — mejorar UX después |
+| `/demo/analyzer` | Perfil influencer + métricas (desde search) | Parcial — mock sync |
+| `/demo/campaigns` | `/dashboard/brand/campaigns` | Funcional ✅ — mejorar wizard después |
+| Propuestas | `/dashboard/brand/proposals` | Funcional ✅ |
+| — | `/dashboard/influencer` | Perfil + propuestas ✅ |
+
 ## Fases
 
-### Fase 1 — POC (actual, aprobada)
+### Fase 1 — POC operativo (actual)
 
 - Auth Clerk + Convex, roles marca / influencer / admin
-- Discover (búsqueda + filtros), campañas, propuestas
+- Dashboard con search, campañas, propuestas (flujo E2E)
 - Mock OAuth y métricas, seed LATAM
-- **Landing premium** (venta, sin demo funcional en home)
+- Landing premium + demo pública v1
 - Deploy Vercel + Convex dev
 
-### Fase 1.5 — Presentación producto (próximo)
+### Fase 1.5 — Presentación (ahora, sin tocar lógica de negocio)
 
-Rutas públicas `/[locale]/demo/*` (cuando UX esté pulida), inspiradas en flujos de mercado pero marca propia:
+Issues `LAND-*` y `DEMO-*`: solo capa pública para que el socio **venda**.
 
-| Demo | Objetivo |
-|------|----------|
-| `DEMO-001` Hub panel | Shell anunciante |
-| `DEMO-002` Discover | Búsqueda avanzada |
-| `DEMO-003` Analyzer | Ficha + KPIs + audiencia |
-| `DEMO-004` Campaign planner | Wizard por red (ej. Instagram) |
+- Pulir `/demo/*` (estático → interactivo opcional con fixtures)
+- LAND-011 metadata, LAND-013 guion de ventas
+- **No** es obligatorio duplicar cada feature en demo si el dashboard ya la tiene
 
-Backlog detallado: `.agents/skills/influencehub-landing/issues.md`
+### Fase 1.6 — Producto logueado (planificado después)
+
+Issues `DASH-*` en [issues.md](../.agents/skills/influencehub-landing/issues.md): mejoras **solo** en rutas autenticadas.
+
+Prioridad sugerida para **marcas**:
+
+1. Panel overview (resumen campañas / propuestas)
+2. Discover UX (paridad visual con demo, datos reales Convex)
+3. Analyzer integrado (ficha al seleccionar influencer)
+4. Campaign planner guiado (wizard alineado con demo)
+5. Propuestas y estados más claros
+
+Para **influencers**:
+
+1. Panel overview (propuestas entrantes, earnings mock)
+2. Perfil + redes + sync métricas (mejor feedback)
+3. Aceptar/rechazar propuestas (UX pulida)
 
 ### Fase 2 — IA (requiere OK explícito)
 
 | ID | Entrega |
 |----|---------|
-| AI-001 | Avatares de IA para briefs y pautas publicitarias |
-| AI-002 | Agente conversacional de campañas para marcas |
-| AI-003 | Logística de campaña como servicio (recomendaciones, estados) |
+| AI-001 | Avatares de IA (marcas) — briefs y pautas |
+| AI-002 | Agente de campañas |
+| AI-003 | Logística como servicio |
 
-También en roadmap general: búsqueda IA, Stripe, OAuth real, Qdrant.
+IA vive primero en **dashboard marca**, no en landing.
 
-## Landing (Track A)
+## Backlog
 
-- Hero futurista, mockups estáticos, grid herramientas, sección visión IA
-- Sin tabla/buscador funcional en la home
-- Issues: `LAND-*` en el skill
+- Público: `.agents/skills/influencehub-landing/issues.md` (`LAND-*`, `DEMO-*`)
+- App logueada: mismo archivo (`DASH-*`, `INFL-*`)
+- IA: `AI-*`
 
 ## Configuración local
 
-Si ves `Publishable key not valid`:
-
-1. Abre [Clerk Dashboard](https://dashboard.clerk.com) → API Keys
-2. Copia **Publishable key** (`pk_test_…`) y **Secret key** (`sk_test_…`) a `.env.local`
-3. No uses valores `placeholder` del template
-4. Reinicia `pnpm dev`
-
-`CLERK_JWT_ISSUER_DOMAIN` sigue en el deployment de Convex (no en Vercel para validación JWT).
+Si ves `Publishable key not valid`: claves reales de Clerk en `.env.local` (no `placeholder`). Ver README.

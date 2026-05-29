@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { DemoShell } from "@/components/demo/demo-shell";
-import { DemoDiscoverPreview } from "@/components/demo/demo-discover-preview";
+import { DemoDiscoverPanel } from "@/components/demo/demo-discover-panel";
 import { createTranslator, getDictionary, isLocale, type Locale } from "@/lib/i18n";
 
 export default async function DemoDiscoverPage({
@@ -22,7 +22,7 @@ export default async function DemoDiscoverPage({
       title={t("demo.discoverTitle")}
       subtitle={t("demo.discoverSubtitle")}
     >
-      <DemoDiscoverPreview locale={locale} />
+      <DemoDiscoverPanel locale={locale} />
     </DemoShell>
   );
 }

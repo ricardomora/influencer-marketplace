@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
-import { DemoCampaignWizard } from "@/components/demo/demo-campaign-wizard";
+import { DemoPanelOverview } from "@/components/demo/demo-panel-overview";
 import { DemoShell } from "@/components/demo/demo-shell";
 import { createTranslator, getDictionary, isLocale, type Locale } from "@/lib/i18n";
 
-export default async function DemoCampaignsPage({
+export default async function DemoPanelPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -18,11 +18,11 @@ export default async function DemoCampaignsPage({
     <DemoShell
       locale={locale}
       dict={dict}
-      segment="campaigns"
-      title={t("demo.campaignsTitle")}
-      subtitle={t("demo.campaignsSubtitle")}
+      segment="panel"
+      title={t("demo.panelTitle")}
+      subtitle={t("demo.panelSubtitle")}
     >
-      <DemoCampaignWizard locale={locale} />
+      <DemoPanelOverview locale={locale} dict={dict} />
     </DemoShell>
   );
 }

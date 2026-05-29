@@ -144,6 +144,11 @@ pnpm exec convex run seed:seedDemoData
 
 Creates 10 LATAM influencers (mock metrics), 2 demo brands, campaigns, and a sample proposal.
 
+### Demo script (sales)
+
+Step-by-step walkthrough for partners: [docs/DEMO-SCRIPT.md](docs/DEMO-SCRIPT.md).  
+Product plan (public vs logged-in app): [docs/PRODUCT-ROADMAP.md](docs/PRODUCT-ROADMAP.md).
+
 ### 7. Deploy
 
 ```bash

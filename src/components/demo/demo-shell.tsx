@@ -8,9 +8,11 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "", labelKey: "navHub", icon: "⌂" },
+  { href: "/panel", labelKey: "navPanel", icon: "▦" },
   { href: "/discover", labelKey: "navDiscover", icon: "◎" },
   { href: "/analyzer", labelKey: "navAnalyzer", icon: "◈" },
   { href: "/campaigns", labelKey: "navCampaigns", icon: "▣" },
+  { href: "/proposals", labelKey: "navProposals", icon: "◇" },
 ] as const;
 
 export function DemoShell({
@@ -23,7 +25,7 @@ export function DemoShell({
 }: {
   locale: Locale;
   dict: Dictionary;
-  segment: "" | "discover" | "analyzer" | "campaigns";
+  segment: "" | "panel" | "discover" | "analyzer" | "campaigns" | "proposals";
   title: string;
   subtitle?: string;
   children: React.ReactNode;

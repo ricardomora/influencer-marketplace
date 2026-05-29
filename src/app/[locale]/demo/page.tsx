@@ -1,13 +1,21 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Search, BarChart3, Megaphone } from "lucide-react";
+import {
+  Search,
+  BarChart3,
+  Megaphone,
+  LayoutDashboard,
+  FileText,
+} from "lucide-react";
 import { DemoShell } from "@/components/demo/demo-shell";
 import { createTranslator, getDictionary, isLocale, type Locale } from "@/lib/i18n";
 
 const CARDS = [
+  { href: "panel", icon: LayoutDashboard, titleKey: "navPanel", descKey: "cardPanelDesc" },
   { href: "discover", icon: Search, titleKey: "navDiscover", descKey: "cardDiscoverDesc" },
   { href: "analyzer", icon: BarChart3, titleKey: "navAnalyzer", descKey: "cardAnalyzerDesc" },
   { href: "campaigns", icon: Megaphone, titleKey: "navCampaigns", descKey: "cardCampaignsDesc" },
+  { href: "proposals", icon: FileText, titleKey: "navProposals", descKey: "cardProposalsDesc" },
 ] as const;
 
 export default async function DemoHubPage({
@@ -29,7 +37,7 @@ export default async function DemoHubPage({
       title={t("demo.hubTitle")}
       subtitle={t("demo.hubSubtitle")}
     >
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {CARDS.map(({ href, icon: Icon, titleKey, descKey }) => (
           <Link
             key={href}

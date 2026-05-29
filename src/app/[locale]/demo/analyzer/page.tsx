@@ -1,5 +1,6 @@
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { DemoAnalyzerPreview } from "@/components/demo/demo-analyzer-preview";
+import { DemoAnalyzerPanel } from "@/components/demo/demo-analyzer-panel";
 import { DemoShell } from "@/components/demo/demo-shell";
 import { createTranslator, getDictionary, isLocale, type Locale } from "@/lib/i18n";
 
@@ -22,7 +23,9 @@ export default async function DemoAnalyzerPage({
       title={t("demo.analyzerTitle")}
       subtitle={t("demo.analyzerSubtitle")}
     >
-      <DemoAnalyzerPreview locale={locale} dict={dict} />
+      <Suspense fallback={<div className="h-48 animate-pulse rounded-xl bg-gray-100" />}>
+        <DemoAnalyzerPanel locale={locale} />
+      </Suspense>
     </DemoShell>
   );
 }

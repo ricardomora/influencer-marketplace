@@ -1,8 +1,16 @@
 # InfluenceHub — Issue Backlog
 
-Prefixes: **`LAND-*`** = landing (venta, diseño) · **`DEMO-*`** = demos tipo SocialPubli (producto pulido)
+Prefixes:
 
-Referencia competidor: [reference-socialpubli.md](./reference-socialpubli.md)
+- **`LAND-*`** — landing pública (venta)
+- **`DEMO-*`** — `/[locale]/demo/*` vitrina **sin login** (presentación al cliente)
+- **`DASH-*`** — `/[locale]/dashboard/*` **marcas logueadas** (producto real, planificado después)
+- **`INFL-*`** — dashboard **influencer** logueado
+- **`AI-*`** — Fase 2, requiere OK
+
+**Regla:** Si una feature ya funciona en dashboard con Convex, no hace falta reimplementarla en demo — solo alinear la vitrina visual. Los cambios de lógica y datos van en `DASH-*` / `INFL-*`.
+
+Referencia interna: [reference-socialpubli.md](./reference-socialpubli.md) · Plan: [docs/PRODUCT-ROADMAP.md](../../../docs/PRODUCT-ROADMAP.md)
 
 ---
 
@@ -46,9 +54,9 @@ Strip bajo el hero (Instagram, TikTok, YouTube, LinkedIn).
 
 ---
 
-### LAND-011 — Brand visual (OG, metadata, paleta)
+### LAND-011 — Brand visual (OG, metadata, paleta) ✅
 
-**Priority:** P2 · **Effort:** M
+`generateMetadata` en `[locale]/layout`, `opengraph-image.tsx`, `ogTitle` en metadata es/en.
 
 ---
 
@@ -56,9 +64,9 @@ Strip bajo el hero (Instagram, TikTok, YouTube, LinkedIn).
 
 ---
 
-### LAND-013 — Guion de ventas (`docs/DEMO-SCRIPT.md`)
+### LAND-013 — Guion de ventas (`docs/DEMO-SCRIPT.md`) ✅
 
-Actualizar: landing = pitch visual; producto = dashboard + futuros `/demo`.
+Guion 5–10 min: landing → demo pública → signup marca → search → campaña → propuesta; FAQ y qué no prometer.
 
 ---
 
@@ -70,33 +78,33 @@ Actualizar: landing = pitch visual; producto = dashboard + futuros `/demo`.
 
 ---
 
-### DEMO-002 — Discover (interactivo) 🔄
+### DEMO-002 — Discover demo (vitrina) ✅
 
-Mejorar `/demo/discover`: filtros vivos, más filas, enlace a signup. Patrón: `brand-search-panel`.
+Filtros vivos + tabla + modal signup en `/demo/discover` (`demo-discover-panel.tsx`, `discover-fixtures.ts`).
 
-**App real:** `/dashboard/brand/search`
+**Producto real (después):** `DASH-002` en `/dashboard/brand/search`
 
 ---
 
-### DEMO-003 — Analyzer ✅ (v1 estática)
+### DEMO-003 — Analyzer ✅
 
-`/demo/analyzer` — ficha mock con KPIs y gráfico.
+`/demo/analyzer?creator=` — ficha dinámica desde fixtures + audiencia mock.
 
 **App real:** perfil + `socialAccounts` + demographics
 
 ---
 
-### DEMO-004 — Campaign planner ✅ (v1 estática)
+### DEMO-004 — Campaign planner ✅
 
-`/demo/campaigns` — wizard mock por pasos.
+`/demo/campaigns` — wizard interactivo por pasos + resumen.
 
 **App real:** `/dashboard/brand/campaigns`
 
 ---
 
-### DEMO-005 — Panel campañas (dashboard mock)
+### DEMO-005 — Panel + propuestas ✅
 
-Lista campañas con estados, reach estimado, acciones — datos estáticos o seed.
+`/demo/panel` — KPIs + tabla campañas. `/demo/proposals` — lista propuestas mock.
 
 ---
 
@@ -108,22 +116,83 @@ Lista campañas con estados, reach estimado, acciones — datos estáticos o see
 
 ---
 
-## Optimizaciones vs SocialPubli (aplicar en DEMO-*)
+## Track D — Dashboard marca (logueado, planificado después)
 
-1. Flujo único Discover → Analyzer → Campaña → Propuesta  
-2. Shell consistente (un sidebar, no tres productos)  
-3. Copy y filtros LATAM-first  
-4. Estados de propuesta legibles en español  
+Implementar aquí la paridad “de sistema”. Reutilizar `brand-search-panel`, `brand-campaigns-panel`, `brand-proposals-panel`.
+
+### DASH-001 — Overview panel marca
+
+Home `/dashboard/brand`: campañas activas, propuestas recientes, CTA crear campaña.
+
+**Prioridad:** P1 · **Effort:** M
+
+---
+
+### DASH-002 — Discover UX (datos reales)
+
+Mejorar `/dashboard/brand/search`: layout tipo demo, filtros claros, ficha rápida / enlace a analyzer.
+
+**Prioridad:** P0 · **Effort:** L · **Depende:** POC search ya existe
+
+---
+
+### DASH-003 — Analyzer desde búsqueda
+
+Al elegir influencer: drawer o página con KPIs, demographics, redes (Convex + mock).
+
+**Prioridad:** P1 · **Effort:** L
+
+---
+
+### DASH-004 — Campaign planner (wizard)
+
+Wizard en `/dashboard/brand/campaigns` alineado con demo: objetivo, presupuesto, fechas, red.
+
+**Prioridad:** P1 · **Effort:** L
+
+---
+
+### DASH-005 — Propuestas y estados
+
+UX clara sent/accepted/rejected; filtros; timeline simple.
+
+**Prioridad:** P2 · **Effort:** M
+
+---
+
+## Track E — Dashboard influencer (logueado, después)
+
+### INFL-001 — Overview influencer
+
+Propuestas pendientes, perfil completion, sync métricas CTA.
+
+### INFL-002 — Perfil y redes (UX)
+
+Formulario perfil + social accounts panel más guiado.
+
+### INFL-003 — Propuestas entrantes
+
+Lista y accept/reject con copy claro en es/en.
 
 ---
 
 ## Sprint sugerido
 
-| Semana | Landing | Producto |
-|--------|---------|----------|
-| 1 | LAND-014, LAND-007, LAND-010 | — |
-| 2 | LAND-008, LAND-009, LAND-011 | DEMO-001, DEMO-002 |
-| 3 | LAND-013 | DEMO-003, DEMO-004 |
+| Fase | Enfoque | Issues |
+|------|---------|--------|
+| **Ahora** | Vender (público) | LAND-011, LAND-013, pulir DEMO v1 |
+| **Después** | Marca logueada | DASH-001 → DASH-004 |
+| **Después** | Influencer logueado | INFL-001 → INFL-003 |
+| **Fase 2** | IA | AI-* (solo con OK) |
+
+---
+
+## Optimizaciones (aplicar en DASH-*, no solo demo)
+
+1. Flujo único Discover → Analyzer → Campaña → Propuesta  
+2. Shell consistente (`dashboard-shell`)  
+3. Copy y filtros LATAM-first  
+4. Estados de propuesta legibles en español  
 
 ---
 
