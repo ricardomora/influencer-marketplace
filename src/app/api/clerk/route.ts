@@ -1,15 +1,38 @@
-import { type WebhookEvent } from "@clerk/nextjs/server";
+import { type UserJSON, type WebhookEvent } from "@clerk/nextjs/server";
 import { ConvexHttpClient } from "convex/browser";
 import { headers } from "next/headers";
 import { Webhook } from "svix";
 import { api } from "../../../../convex/_generated/api";
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+type ClerkRole = "brand" | "influencer" | "admin";
+
+function parseRole(metadata: unknown): ClerkRole | undefined {
+  if (!metadata || typeof metadata !== "object") return undefined;
+  const role = (metadata as { role?: string }).role;
+  if (role === "brand" || role === "influencer" || role === "admin") {
+    return role;
+  }
+  return undefined;
+}
+
+function roleFromUserData(data: UserJSON): ClerkRole | undefined {
+  return (
+    parseRole(data.public_metadata) ?? parseRole(data.unsafe_metadata)
+  );
+}
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
+  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+
   if (!WEBHOOK_SECRET) {
+    console.error("[clerk webhook] CLERK_WEBHOOK_SECRET is not set");
     return new Response("Webhook secret not configured", { status: 500 });
+  }
+
+  if (!convexUrl) {
+    console.error("[clerk webhook] NEXT_PUBLIC_CONVEX_URL is not set");
+    return new Response("Convex URL not configured", { status: 500 });
   }
 
   const headerPayload = await headers();
@@ -21,7 +44,13 @@ export async function POST(req: Request) {
     return new Response("Missing svix headers", { status: 400 });
   }
 
-  const payload = await req.json();
+  let payload: unknown;
+  try {
+    payload = await req.json();
+  } catch {
+    return new Response("Invalid JSON body", { status: 400 });
+  }
+
   const body = JSON.stringify(payload);
   const wh = new Webhook(WEBHOOK_SECRET);
 
@@ -32,33 +61,39 @@ export async function POST(req: Request) {
       "svix-timestamp": svix_timestamp,
       "svix-signature": svix_signature,
     }) as WebhookEvent;
-  } catch {
+  } catch (err) {
+    console.error("[clerk webhook] verification failed", err);
     return new Response("Webhook verification failed", { status: 400 });
   }
 
-  if (evt.type === "user.created" || evt.type === "user.updated") {
-    const { email_addresses, first_name, last_name, image_url, id } = evt.data;
-    const email = email_addresses?.[0]?.email_address;
-    if (!email || !id) {
-      return new Response("Missing email or user id", { status: 400 });
+  const convex = new ConvexHttpClient(convexUrl);
+
+  try {
+    if (evt.type === "user.created" || evt.type === "user.updated") {
+      const { email_addresses, first_name, last_name, image_url, id } =
+        evt.data;
+      const email = email_addresses?.[0]?.email_address;
+      if (!email || !id) {
+        console.error("[clerk webhook] missing email or clerk id", evt.type);
+        return new Response("Missing email or user id", { status: 400 });
+      }
+
+      const name = [first_name, last_name].filter(Boolean).join(" ");
+      const role = roleFromUserData(evt.data as UserJSON);
+
+      await convex.mutation(api.users.syncUser, {
+        clerkId: id,
+        email,
+        name: name || undefined,
+        avatarUrl: image_url || undefined,
+        role,
+      });
+
+      console.info("[clerk webhook] synced user", { clerkId: id, type: evt.type });
     }
-
-    const name = [first_name, last_name].filter(Boolean).join(" ");
-    const metadata = evt.data.public_metadata as { role?: string } | undefined;
-    const role =
-      metadata?.role === "brand" ||
-      metadata?.role === "influencer" ||
-      metadata?.role === "admin"
-        ? metadata.role
-        : undefined;
-
-    await convex.mutation(api.users.syncUser, {
-      clerkId: id,
-      email,
-      name: name || undefined,
-      avatarUrl: image_url || undefined,
-      role,
-    });
+  } catch (err) {
+    console.error("[clerk webhook] sync failed", evt.type, err);
+    return new Response("Sync failed", { status: 500 });
   }
 
   return new Response("OK", { status: 200 });

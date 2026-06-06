@@ -99,7 +99,7 @@ Clerk gives you **two different** configs:
    NEXT_PUBLIC_CLERK_SIGN_IN_URL=/es/login
    NEXT_PUBLIC_CLERK_SIGN_UP_URL=/es/signup
    ```
-7. (Optional, for user sync) Webhook → `http://localhost:3000/api/clerk` via ngrok in dev; events `user.created`, `user.updated`; set `CLERK_WEBHOOK_SECRET` in `.env.local`.
+7. **Webhook (recommended for production):** sync Clerk users into Convex. See [docs/CLERK-WEBHOOK.md](docs/CLERK-WEBHOOK.md). Set `CLERK_WEBHOOK_SECRET` in Vercel and `.env.local`.
 
 ### Troubleshooting: `Publishable key not valid` (browser)
 
@@ -156,7 +156,7 @@ pnpm exec convex deploy
 # Vercel: import repo, set env vars, deploy
 ```
 
-Update Clerk redirect URLs and webhook endpoint to production.
+Update Clerk redirect URLs and configure the webhook (`/api/clerk`) — see [docs/CLERK-WEBHOOK.md](docs/CLERK-WEBHOOK.md).
 
 ## User flows (Fase 1)
 

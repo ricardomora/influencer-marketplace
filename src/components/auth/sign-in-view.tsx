@@ -1,18 +1,12 @@
 import { SignIn } from "@clerk/nextjs";
-import { notFound } from "next/navigation";
 import { ClerkSetupNotice } from "@/components/clerk-setup-notice";
 import { isClerkPublishableKeyValid } from "@/lib/clerk-config";
-import { createTranslator, getDictionary, isLocale } from "@/lib/i18n";
+import { createTranslator, getDictionary, type Locale } from "@/lib/i18n";
 
-export default async function LoginPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  if (!isLocale(locale)) notFound();
+export async function SignInView({ locale }: { locale: Locale }) {
   const dict = await getDictionary(locale);
   const t = createTranslator(dict);
+  const afterAuthUrl = `/${locale}/onboarding`;
 
   const clerkOk = isClerkPublishableKeyValid(
     process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
@@ -32,12 +26,13 @@ export default async function LoginPage({
           backLabel={t("auth.backToHome")}
         />
       ) : (
-      <SignIn
-        routing="path"
-        path={`/${locale}/login`}
-        signUpUrl={`/${locale}/signup`}
-        forceRedirectUrl={`/${locale}/onboarding`}
-      />
+        <SignIn
+          routing="path"
+          path={`/${locale}/login`}
+          signUpUrl={`/${locale}/signup`}
+          forceRedirectUrl={afterAuthUrl}
+          fallbackRedirectUrl={afterAuthUrl}
+        />
       )}
     </div>
   );

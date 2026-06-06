@@ -1,19 +1,15 @@
 import { SignUp } from "@clerk/nextjs";
-import { notFound } from "next/navigation";
 import { ClerkSetupNotice } from "@/components/clerk-setup-notice";
 import { isClerkPublishableKeyValid } from "@/lib/clerk-config";
-import { createTranslator, getDictionary, isLocale } from "@/lib/i18n";
+import { createTranslator, getDictionary, type Locale } from "@/lib/i18n";
 
-export default async function SignupPage({
-  params,
-  searchParams,
+export async function SignUpView({
+  locale,
+  role,
 }: {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<{ role?: string }>;
+  locale: Locale;
+  role?: string;
 }) {
-  const { locale } = await params;
-  const { role } = await searchParams;
-  if (!isLocale(locale)) notFound();
   const dict = await getDictionary(locale);
   const t = createTranslator(dict);
 
@@ -45,6 +41,7 @@ export default async function SignupPage({
           path={`/${locale}/signup`}
           signInUrl={`/${locale}/login`}
           forceRedirectUrl={onboardingUrl}
+          fallbackRedirectUrl={onboardingUrl}
         />
       )}
     </div>

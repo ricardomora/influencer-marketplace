@@ -29,7 +29,10 @@ function localeRouting(
   );
 
   if (pathnameHasLocale) {
-    if (userId && pathname.match(/^\/(en|es)\/(login|signup)$/)) {
+    if (
+      userId &&
+      pathname.match(/^\/(en|es)\/(login|signup)(\/.*)?$/)
+    ) {
       const locale = pathname.split("/")[1] ?? defaultLocale;
       const role = (sessionClaims?.metadata as { role?: string } | undefined)
         ?.role;
